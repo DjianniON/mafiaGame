@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,6 +57,39 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="integer")
      */
     private $elo = 0;
+
+        //Propriété pour vérifier le rôle dans le CRUD
+    private $monrole;
+
+        /**
+         * @ORM\OneToMany(targetEntity="App\Entity\Joueur", mappedBy="Users")
+         */
+        private $joueurs;
+
+        public function __construct()
+        {
+            $this->joueurs = new ArrayCollection();
+        }
+
+    /**
+     * @return mixed
+     */
+    public function getMonrole()
+    {
+        //todo: vérifier pas vide.
+        return $this->roles[0];
+    }
+
+    /**
+     * @param mixed $monrole
+     */
+    public function setMonrole($monrole): void
+    {
+        //todo: Vérifier si ça casse pas.
+        $this->roles[0] = $monrole;
+    }
+
+
 
     public function getId(): ?int
     {
@@ -182,4 +217,36 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return Collection|Joueur[]
+     */
+    public function getJoueurs(): Collection
+    {
+        return $this->joueurs;
+    }
+
+    public function addJoueur(Joueur $joueur): self
+    {
+        if (!$this->joueurs->contains($joueur)) {
+            $this->joueurs[] = $joueur;
+            $joueur->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoueur(Joueur $joueur): self
+    {
+        if ($this->joueurs->contains($joueur)) {
+            $this->joueurs->removeElement($joueur);
+            // set the owning side to null (unless already changed)
+            if ($joueur->getUsers() === $this) {
+                $joueur->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
