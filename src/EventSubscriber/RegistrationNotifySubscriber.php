@@ -27,7 +27,6 @@ class RegistrationNotifySubscriber implements EventSubscriberInterface
         return [
             // le nom de l'event et le nom de la fonction qui sera déclenché
             Events::USER_REGISTERED => 'onUserRegistrated',
-            Events::DONATION_DONE => 'donationDone'
         ];
     }
 
@@ -36,9 +35,9 @@ class RegistrationNotifySubscriber implements EventSubscriberInterface
         /** @var User $user */
         $user = $event->getSubject();
 
-        $subject = "Welcome to GreenLiten !";
+        $subject = "Welcome to Chicago 30 !";
         $body = "Dear ".$user->getUsername().",<br>
-        Welcome to our web site!.<br>
+        Welcome to our web site!<br>
         Yours sincerely,<br> 
         Madjac.
         ";
