@@ -49,12 +49,12 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="integer")
      */
-    private $nbVictoires;
+    private $nbVictoires = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $elo;
+    private $elo = 0;
 
     public function getId(): ?int
     {
