@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4abf9609-1521-48df-817f-373ff5977da5" name="Default Changelist" comment="Avancée">
-      <change afterPath="$PROJECT_DIR$/src/Controller/MainController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Migrations/Version20180911142447.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/Admin/index.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/Security/login.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/index.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
+    <list default="true" id="4abf9609-1521-48df-817f-373ff5977da5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/framework.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/framework.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EventSubscriber/RegistrationNotifySubscriber.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventSubscriber/RegistrationNotifySubscriber.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Events.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Events.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/UserType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/UserType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +91,7 @@
           <entry key="env" value="95" />
           <entry key="php" value="204" />
           <entry key="twig" value="5" />
-          <entry key="txt" value="8" />
+          <entry key="txt" value="32" />
           <entry key="yaml" value="92" />
         </counts>
       </usages-collector>
@@ -119,7 +99,7 @@
         <counts>
           <entry key=".env file" value="95" />
           <entry key="PHP" value="204" />
-          <entry key="PLAIN_TEXT" value="16" />
+          <entry key="PLAIN_TEXT" value="40" />
           <entry key="Twig" value="5" />
           <entry key="YAML" value="92" />
         </counts>
@@ -469,12 +449,20 @@
       <workItem from="1538563438743" duration="1197000" />
       <workItem from="1538601172714" duration="168000" />
       <workItem from="1538601398874" duration="189000" />
-      <workItem from="1538632876314" duration="1168000" />
+      <workItem from="1538632876314" duration="2157000" />
     </task>
+    <task id="LOCAL-00001" summary="BUG SUBSCRIBE USER">
+      <created>1538634235712</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1538634235712</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30656000" />
+    <option name="totallyTimeSpent" value="31645000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -486,9 +474,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="34" width="1513" height="973" extended-state="6" />
+    <frame x="-6" y="34" width="1513" height="973" extended-state="7" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18487972" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18487972" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -497,13 +485,13 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49828178" weight="0.32897863" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4975945" weight="0.32897863" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49209622" weight="0.32660332" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.47285223" visible="true" weight="0.27315915" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.52714777" side_tool="true" visible="true" weight="0.27315915" />
-      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49947643" weight="0.32934132" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" sideWeight="0.48934707" visible="true" weight="0.32660332" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.47216496" weight="0.27315915" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5106529" side_tool="true" visible="true" weight="0.32660332" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49896908" weight="0.32897863" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -518,7 +506,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Avancée" />
-    <option name="LAST_COMMIT_MESSAGE" value="Avancée" />
+    <MESSAGE value="BUG SUBSCRIBE USER" />
+    <option name="LAST_COMMIT_MESSAGE" value="BUG SUBSCRIBE USER" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.env.dist">
