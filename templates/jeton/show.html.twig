@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeton{% endblock %}
+
+{% block body %}
+    <h1>Jeton</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ jeton.id }}</td>
+            </tr>
+            <tr>
+                <th>Valeur</th>
+                <td>{{ jeton.valeur }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ jeton.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('jeton_index') }}">back to list</a>
+
+    <a href="{{ path('jeton_edit', {'id': jeton.id}) }}">edit</a>
+
+    {{ include('jeton/_delete_form.html.twig') }}
+{% endblock %}

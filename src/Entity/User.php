@@ -77,7 +77,12 @@ class User implements UserInterface, \Serializable
     public function getMonrole()
     {
         //todo: vérifier pas vide.
-        return $this->roles[0];
+        if(empty($this->roles)){
+            return "NULL";
+        }
+        else{
+            return $this->roles[0];
+        }
     }
 
     /**

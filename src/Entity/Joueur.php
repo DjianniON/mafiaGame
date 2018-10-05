@@ -29,6 +29,21 @@ class Joueur
      */
     private $Parties;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $Main = [];
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $tasJetons = [];
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $score;
+
     public function __construct()
     {
         $this->Parties = new ArrayCollection();
@@ -73,6 +88,42 @@ class Joueur
         if ($this->Parties->contains($party)) {
             $this->Parties->removeElement($party);
         }
+
+        return $this;
+    }
+
+    public function getMain(): ?array
+    {
+        return $this->Main;
+    }
+
+    public function setMain(array $Main): self
+    {
+        $this->Main = $Main;
+
+        return $this;
+    }
+
+    public function getTasJetons(): ?array
+    {
+        return $this->tasJetons;
+    }
+
+    public function setTasJetons(array $tasJetons): self
+    {
+        $this->tasJetons = $tasJetons;
+
+        return $this;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(float $score): self
+    {
+        $this->score = $score;
 
         return $this;
     }

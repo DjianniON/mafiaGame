@@ -23,8 +23,9 @@ security:
                 login_path: security_login
                 # Securisation des formulaires
                 csrf_token_generator: security.csrf.token_manager
-                # La page par defaut apres une connexion reussie
-                default_target_path: index
+
+                #default_target_path: index #La page par defaut apres une connexion reussie
+                success_handler: redirect.login #Evenement lors d'un login réussi effectué
 
             logout:
                 # La route où se trouve le process de deconnexion

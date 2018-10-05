@@ -6,12 +6,15 @@ use App\Entity\User;
 use App\Form\User1Type;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/user")
+ * @Route("/admin/user")
  */
 class UserController extends AbstractController
 {
@@ -26,16 +29,23 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="user_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function new(Request $request,UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher): Response
     {
         $user = new User();
         $form = $this->createForm(User1Type::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+
+            $event = new GenericEvent($user);
+            $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
 
             return $this->redirectToRoute('user_index');
         }
