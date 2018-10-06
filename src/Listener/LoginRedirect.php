@@ -41,9 +41,11 @@ class LoginRedirect implements AuthenticationSuccessHandlerInterface
         },$roles);
 
 
-        dump($roles);
-        if (\in_array("ROLE_ADMIN", $tabRoles, true)){
-            $redirection = new RedirectResponse($this->router->generate('user_index'));
+        if (\in_array("ROLE_SUPER_ADMIN", $tabRoles, true)){
+            $redirection = new RedirectResponse($this->router->generate('admin_index'));
+        }
+        elseif (\in_array("ROLE_ADMIN", $tabRoles, true)){
+            $redirection = new RedirectResponse($this->router->generate('admin_index'));
     }
         elseif (\in_array("ROLE_BANNED", $tabRoles, true)){
             $redirection = new RedirectResponse($this->router->generate('index'));

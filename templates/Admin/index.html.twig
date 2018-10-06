@@ -3,4 +3,11 @@
 {% block body %}
     Bienvenue {{ app.user.username }} !
 
+    <a href="{{ path('user_index') }}">Gestion User</a>
+
+    {% if app.user.roles == ['ROLE_SUPER_ADMIN'] %}
+    <a href="{{ path('carte_index') }}">Gestion Cartes</a>
+    <a href="{{ path('jeton_index') }}">Gestion Jetons</a>
+    {% endif %}
+
 {% endblock %}

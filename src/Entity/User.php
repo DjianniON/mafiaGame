@@ -66,9 +66,15 @@ class User implements UserInterface, \Serializable
          */
         private $joueurs;
 
+        /**
+         * @ORM\ManyToMany(targetEntity="App\Entity\Tournoi", mappedBy="Joueurs")
+         */
+        private $tournois;
+
         public function __construct()
         {
             $this->joueurs = new ArrayCollection();
+            $this->tournois = new ArrayCollection();
         }
 
     /**
@@ -249,6 +255,34 @@ class User implements UserInterface, \Serializable
             if ($joueur->getUsers() === $this) {
                 $joueur->setUsers(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tournoi[]
+     */
+    public function getTournois(): Collection
+    {
+        return $this->tournois;
+    }
+
+    public function addTournois(Tournoi $tournois): self
+    {
+        if (!$this->tournois->contains($tournois)) {
+            $this->tournois[] = $tournois;
+            $tournois->addJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournois(Tournoi $tournois): self
+    {
+        if ($this->tournois->contains($tournois)) {
+            $this->tournois->removeElement($tournois);
+            $tournois->removeJoueur($this);
         }
 
         return $this;
