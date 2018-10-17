@@ -25,11 +25,6 @@ class Joueur
     private $Users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Partie", inversedBy="joueurs")
-     */
-    private $Parties;
-
-    /**
      * @ORM\Column(type="array")
      */
     private $Main = [];
@@ -44,9 +39,19 @@ class Joueur
      */
     private $score;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $Chameaux = [];
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Partie", mappedBy="Joueurs",cascade={"persist"})
+     */
+    private $parties;
+
     public function __construct()
     {
-        $this->Parties = new ArrayCollection();
+        $this->parties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,31 +71,7 @@ class Joueur
         return $this;
     }
 
-    /**
-     * @return Collection|Partie[]
-     */
-    public function getParties(): Collection
-    {
-        return $this->Parties;
-    }
 
-    public function addParty(Partie $party): self
-    {
-        if (!$this->Parties->contains($party)) {
-            $this->Parties[] = $party;
-        }
-
-        return $this;
-    }
-
-    public function removeParty(Partie $party): self
-    {
-        if ($this->Parties->contains($party)) {
-            $this->Parties->removeElement($party);
-        }
-
-        return $this;
-    }
 
     public function getMain(): ?array
     {
@@ -124,6 +105,46 @@ class Joueur
     public function setScore(float $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getChameaux(): ?array
+    {
+        return $this->Chameaux;
+    }
+
+    public function setChameaux(array $Chameaux): self
+    {
+        $this->Chameaux = $Chameaux;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Partie[]
+     */
+    public function getParties(): Collection
+    {
+        return $this->parties;
+    }
+
+    public function addParty(Partie $party): self
+    {
+        if (!$this->parties->contains($party)) {
+            $this->parties[] = $party;
+            $party->addJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParty(Partie $party): self
+    {
+        if ($this->parties->contains($party)) {
+            $this->parties->removeElement($party);
+            $party->removeJoueur($this);
+        }
 
         return $this;
     }

@@ -47,4 +47,14 @@ class RegistrationController extends Controller
             array('form' => $form->createView())
         );
     }
+
+    /**
+     * @Route("/lost-password", name="user_passwordLost")
+     */
+    public function passwordLost(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher)
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+
+    }
 }

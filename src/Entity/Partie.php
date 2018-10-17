@@ -26,16 +26,6 @@ class Partie
     /**
      * @ORM\Column(type="array")
      */
-    private $Joueur1 = [];
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $Joueur2 = [];
-
-    /**
-     * @ORM\Column(type="array")
-     */
     private $Terrain = [];
 
     /**
@@ -69,14 +59,16 @@ class Partie
     private $Status = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Joueur", mappedBy="Parties")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Joueur", inversedBy="parties",cascade={"persist"}, fetch="EAGER")
      */
-    private $joueurs;
+    private $Joueurs;
 
     public function __construct()
     {
-        $this->joueurs = new ArrayCollection();
+        $this->Joueurs = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -91,30 +83,6 @@ class Partie
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getJoueur1(): ?array
-    {
-        return $this->Joueur1;
-    }
-
-    public function setJoueur1(array $Joueur1): self
-    {
-        $this->Joueur1 = $Joueur1;
-
-        return $this;
-    }
-
-    public function getJoueur2(): ?array
-    {
-        return $this->Joueur2;
-    }
-
-    public function setJoueur2(array $Joueur2): self
-    {
-        $this->Joueur2 = $Joueur2;
 
         return $this;
     }
@@ -208,14 +176,13 @@ class Partie
      */
     public function getJoueurs(): Collection
     {
-        return $this->joueurs;
+        return $this->Joueurs;
     }
 
     public function addJoueur(Joueur $joueur): self
     {
-        if (!$this->joueurs->contains($joueur)) {
-            $this->joueurs[] = $joueur;
-            $joueur->addParty($this);
+        if (!$this->Joueurs->contains($joueur)) {
+            $this->Joueurs[] = $joueur;
         }
 
         return $this;
@@ -223,9 +190,8 @@ class Partie
 
     public function removeJoueur(Joueur $joueur): self
     {
-        if ($this->joueurs->contains($joueur)) {
-            $this->joueurs->removeElement($joueur);
-            $joueur->removeParty($this);
+        if ($this->Joueurs->contains($joueur)) {
+            $this->Joueurs->removeElement($joueur);
         }
 
         return $this;

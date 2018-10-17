@@ -24,7 +24,8 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/web-profiler-bundle": "*",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+      "ext-http": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Jeton;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +18,47 @@ class JetonRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Jeton::class);
+    }
+
+    public function findByTypeValue()
+    {
+        $jetons = $this->createQueryBuilder('j')
+            ->orderBy('j.type','ASC')
+            ->orderBy('j.valeur', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $tJetons = [];
+        $tJetons['Cadillac'] = [];
+        $tJetons['Argent'] = [];
+        $tJetons['Cigarette'] = [];
+        $tJetons['Alcool'] = [];
+        $tJetons['Oeuvre'] = [];
+        $tJetons['Arme'] = [];
+        $tJetons['Drogue'] = [];
+        $tJetons['Chap_3'] = [];
+        $tJetons['Chap_4'] = [];
+        $tJetons['Chap_5'] = [];
+
+        foreach($jetons as $jeton) {
+            $tJetons[$jeton->getType()->getNom()][] = $jeton->getId();
+        }
+
+        shuffle($tJetons['Chap_3']);
+        shuffle($tJetons['Chap_4']);
+        shuffle($tJetons['Chap_5']);
+
+        return $tJetons;
+    }
+
+    public function findByArrayId()
+    {
+        return $this->createQueryBuilder('jj')
+            ->from($this->getClassName(), 'j', 'jj.id')
+            ->orderBy('j.id', 'ASC')
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
     }
 
 //    /**
