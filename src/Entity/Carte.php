@@ -54,4 +54,11 @@ class Carte
 
         return $this;
     }
+    public function getJson() {
+        return [
+            'id' => $this->getId(),
+            'fichier' => $this->getImage(),
+            'nom' => $this->getType()->getNom()
+        ];
+    }
 }

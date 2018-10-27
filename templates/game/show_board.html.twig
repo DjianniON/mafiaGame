@@ -61,36 +61,57 @@
         </div>
     </div>
     <div class="col-sm-8">
+        {% if app.user.username == partie.joueurs[0].users.username %}
+            {% set joueur1 = partie.joueurs[0] %}
+            {% set joueur2 = partie.joueurs[1] %}
+        {% else %}
+            {% set joueur1 = partie.joueurs[1] %}
+            {% set joueur2 = partie.joueurs[0] %}
+            {% endif %}
         <div class="row">
             <div class="col-sm-12" style="height: 100px">
-                {% for carte in partie.joueurs[1].main %}
-                    <img src="{{ asset('cartes/dos.jpg') }}" height="100px" />
+                {% for card in joueur2.main %}
+                    <img src="{{ asset('cartes/img/dos.png') }}" height="100px" />
                 {% endfor %}
             </div>
             <div class="col-sm-12" style="height: 100px">
-                {% for card in partie.joueurs[1].chameaux %} <!--todo: Cartes chameau -->
+                {% for card in joueur2.chameaux %} <!--todo: Cartes chameau -->
                     <img src="{{ asset('cartes/'~card.image) }}" height="100px" />
                 {% endfor %}
             </div>
             <div class="col-sm-12" style="height: 100px">
                 <div class="row">
-                    <div class="col-sm-2">{% if partie.Deck|length > 0 %}<img src="{{ asset('cartes/dos.jpg') }}" height="100px" />{% else %}Vide{% endif %}<p>Pioche</p></div>
+                    <div class="col-sm-2">{% if partie.Deck|length > 0 %}<img src="{{ asset('cartes/img/dos.png') }}" height="100px" />{% else %}Vide{% endif %}<p>Pioche</p></div>
                     {% for card in partie.terrain %}
-                        <div class="col-sm-2"><img src="{{ asset('cartes/'~card.image) }}" height="100px" /></div>
+                        <div class="col-sm-2"><img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" class="carteterrain {% if card.type.id == 1 %}chameau{% endif %}"  data-carte="{{ card.id }}" height="100px" /></div>
                     {% endfor %}
 
                 </div>
             </div>
             <div class="col-sm-12" style="height: 100px">
-                {% for card in partie.joueurs[0].chameaux %}
-                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" />
+                {% for card in joueur1.chameaux %}
+                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau" height="100px" data-carte="{{ card.id }}" />
                 {% endfor %}
             </div>
             <div class="col-sm-12" style="height: 100px">Mes cartes<br>
-                {% for card in partie.joueurs[0].main %}
-                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" />
+                {% for card in joueur1.main %}
+                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartemain" height="100px" data-carte="{{ card.id }}" />
                 {% endfor %}
             </div>
         </div>
+    </div>
+    <div class="row" id="bloc-action">
+        <div class="col-sm-4">
+            <button class="btn btn-block btn-info" id="action-prendre">Prendre</button>
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-block btn-danger" id="action-vendre">Vendre</button>
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-block btn-warning" id="action-troquer">Troquer</button>
+        </div>
+    </div>
+    <div class="row" id="bloc-suivant" style="display:none">
+        <button class="btn btn-block btn-success" id="action-terminer">Terminer mon tour</button>
     </div>
 </div>

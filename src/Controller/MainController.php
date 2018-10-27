@@ -21,4 +21,12 @@ class MainController extends Controller
     {
         return $this->render('Admin/index.html.twig');
     }
+
+    /**
+     * @Route("/story", name="story")
+     */
+    public function story()
+    {
+        return $this->render('story.html.   twig');
+    }
 }

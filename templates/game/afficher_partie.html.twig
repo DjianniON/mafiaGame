@@ -1,4 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseGame.html.twig' %}
+
+
+{% block stylesheets %}
+    <style>
+        .selected {
+            border: 2px solid red;
+        }
+        .new {
+            border: 2px solid green;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
     <h1>Partie entre {{ partie.joueurs[0].users.username }} et {{ partie.joueurs[1].users.username  }}</h1>
@@ -21,6 +33,7 @@
 
 {% block javascripts %}
 <script>
+    var flag = false;
     var actualise = false;
     $(document).ready(function(){
         setInterval(actualisePlateau, 2000);
@@ -39,12 +52,181 @@
                 if (actualise === false) {
                     console.log('reload');
                     $('#plateau').empty().load("{{ path('show_board', {partie:partie.id}) }}");
+                    $('img').removeClass('selected');
+                    cartesSelectedTerrain = Array();
+                    cartesSelectedChameau = Array();
+                    cartesSelectedMain = Array();
                     actualise = true;
                     $('#attentejoueur').hide();
                 }
-                console.log('Mon tour');
             }
         });
     }
+
+        $(document).on('click', '.cartechameau', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                //retirer d'un tableau
+                $index = cartesSelectedChameau.indexOf($(this).data('carte'));
+                cartesSelectedChameau.splice($index, 1);
+                console.log(cartesSelectedChameau)
+            } else {
+                $(this).addClass('selected');
+                //ajouter dans un tableau
+                cartesSelectedChameau.push($(this).data('carte'));
+                console.log(cartesSelectedChameau)
+            }
+        });
+
+        $(document).on('click', '.cartemain', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                //retirer d'un tableau
+                $index = cartesSelectedMain.indexOf($(this).data('carte'));
+                cartesSelectedMain.splice($index, 1);
+                console.log(cartesSelectedMain)
+            } else {
+                $(this).addClass('selected');
+                //ajouter dans un tableau
+                cartesSelectedMain.push($(this).data('carte'));
+                console.log(cartesSelectedMain)
+            }
+        });
+
+        $(document).on('click', '.carteterrain', function () { //C'est pété
+            if($(this).hasClass('chameau'))
+            {
+                //for (i = 0; i < $('.carteterrain').hasClass('chameau').length ; i++) {
+                $('.carteterrain').filter('.chameau').each(function(){
+
+
+                    if($(this).hasClass('selected'))
+                    {
+                        $(this).removeClass('selected');
+                        //retirer d'un tableau
+                        $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
+                        cartesSelectedTerrain.splice($index, 1);
+                        flag = false;
+                        console.log("Cadillac vide :"+cartesSelectedTerrain);
+                    }
+                    else {
+                        $(this).addClass('selected');
+                        //ajouter dans un tableau
+                        cartesSelectedTerrain.push($(this).data('carte'));
+                        flag = true;
+                        console.log("Mes cartes Cadillac :"+cartesSelectedTerrain)
+                    }
+                });
+            }
+            else {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                    //retirer d'un tableau
+                    $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
+                    cartesSelectedTerrain.splice($index, 1);
+                    flag = false;
+                    console.log("Vide cartes Pacadillac :"+cartesSelectedTerrain)
+                } else {
+                    $(this).addClass('selected');
+                    //ajouter dans un tableau
+                    cartesSelectedTerrain.push($(this).data('carte'));
+                    flag = false;
+                    console.log("Mes cartes Pacadillac :"+cartesSelectedTerrain)
+                }
+            }
+        });
+
+
+
+        $(document).on('click', '#action-prendre', function () {
+            console.log(cartesSelectedTerrain);
+            if (cartesSelectedTerrain.length === 0) {
+                alert('Selectionnez une carte');
+            }
+            else if ((cartesSelectedTerrain.length > 1 && flag === false )) {
+                alert('Selectionnez une seule carte');
+            }
+            else {
+                console.log('OK');
+                $.ajax({
+                    url: "{{ path('action_prendre', {partie: partie.id}) }}",
+                    data: {
+                        cartes: cartesSelectedTerrain
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data);
+                        $('#bloc-action').hide();
+                        $('#bloc-suivant').show();
+                        for(i = 0; i < cartesSelectedTerrain.length ; i++)
+                        {
+                            console.log('carte' + data['cartemain'].id);
+                            $('#carte-' + data['cartemain'].id).remove();
+                            var chameau = '';
+                            if (data['carteterrain'].nom === "Cadillac") {
+                                chameau = "chameau";
+                            }//ça fonctionne ça ?
+                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
+                            $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
+                        }
+
+                    },
+                    error: function (data) {
+                        if (data === 'erreur7') {
+                            alert('Vous avez déjà 7 cartes en main. Vous ne pouvez pas jouer cette action.');
+                        } else {
+                            console.log('erreur action prendre');//J'arrive pas à obtenir l'erreur
+                        }
+                    }
+                })
+            }
+        });
+
+    $(document).on('click', '#action-vendre', function () {
+        console.log(cartesSelectedMain);
+        if (cartesSelectedTerrain.length === 0) {
+            alert('Selectionnez une carte');
+        }
+        else if (cartesSelectedTerrain.length < 1) {
+            alert('Selectionnez une seule carte');
+        }
+        else {
+            console.log('OK');
+            $.ajax({
+                url: "{{ path('action_vendre', {partie: partie.id}) }}",
+                data: {
+                    cartes: cartesSelectedMain
+                },
+                method: 'POST',
+                success: function (data) {
+                    console.log('carte' + data['cartemain'].id);
+                    $('#bloc-action').hide();
+                    $('#bloc-suivant').show();
+                    $('#carte-' + data['cartemain'].id).remove();
+                    var chameau = '';
+                    if (data['carteterrain'].nom === "Cadillac") {
+                        chameau = "chameau";
+                    }//ça fonctionne ça ?
+                    $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
+                    $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
+                },
+                error: function (data) {
+                    if (data === 'erreur7') {
+                        alert('Vous avez déjà 7 cartes en main. Vous ne pouvez pas jouer cette action.');
+                    } else {
+                        console.log('erreur action prendre');//J'arrive pas à obtenir l'erreur
+                    }
+                }
+            })
+        }
+    });
+
+        $(document).on('click', '#action-terminer', function () {
+            $.ajax({
+                url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                method: 'POST'
+            });
+        });
+
 </script>
 {% endblock %}
