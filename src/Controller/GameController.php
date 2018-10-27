@@ -191,7 +191,7 @@ class GameController extends AbstractController
         }
 
 
-        if ($cartes !== null && count($cartes) === 1) {//todo:vérif monocarte
+        if ($cartes !== null && count($cartes) === 1 && $cartes[0]->getType()->getNom() !== 'Cadillac') {//Vérification cas 1 carte marchandise
             $main = $joueur->getMain();
             //vérifier s'il y a 7 cartes dans la main.
             if (count($main) < 7) {
@@ -202,12 +202,8 @@ class GameController extends AbstractController
                 for($i=0;$i < count($terrain);$i++)
                 {
                     $terrainId[] = $terrain[$i]->getId();
-                    //$terId[] = $terrainId->getId();
                 }
-                $cartu = $carteId;
-                $tabId = $terrainId;
                 $index = array_search($carteId, $terrainId);
-                $tabIndex[] = $index;
                 unset($terrain[$index]); // on retire du terrain
                 $pioche = $partie->getDeck();
                 if (count($pioche) > 0) {
@@ -225,18 +221,24 @@ class GameController extends AbstractController
                 $partie->setTerrain($terrain);
                 $partie->setDeck($pioche);
                 $entityManager->flush();
-                return $this->json(['carteterrain' => $cartep->getJson(), 'cartemain' => $carte->getJson(),'index' => $tabIndex, 'Tabid' => $tabId,'carteId' => $cartu], 200);
+                return $this->json(['carteterrain' => $cartep->getJson(), 'cartemain' => $carte->getJson()], 200);
             } else {
                 return $this->json('erreur7', 500);
             }
         }
-        else
+        else //todo:chameaux
         {
-            $terrain = $partie->getTerrain();
+            $chameaux = $joueur->getChameaux();
+            $terrain = array_values($partie->getTerrain());//lalignemagique
+            for($i=0;$i < count($terrain);$i++)
+            {
+                $terrainId[] = $terrain[$i]->getId();
+            }
             for($i=0;$i<count($cartes);$i++)
             {
-                $carte = array_shift($cartes[$i]);
-                $index = array_search($carte, $terrain);//todo:vérifier ça
+                $carteId = $cartes[$i]->getId();
+                $chameaux[] = $cartes[$i];//On ajoute chaque carte Cadillac
+                $index = array_search($carteId, $terrainId);//todo:vérifier ça
                 unset($terrain[$index]); //on retire
             }
             $pioche = $partie->getDeck();
@@ -254,18 +256,17 @@ class GameController extends AbstractController
             {
                 $partie->setStatus(['status' => 'F']);
             }
-            $joueur->setChameaux($cartes);
+            $joueur->setChameaux($chameaux);
             $partie->setTerrain($terrain);
             $partie->setDeck($pioche);
             $entityManager->flush();
             for($i=0;$i<count($cartes);$i++)
             {
-                $carte = array_shift($cartes[$i]);
+                $carte = $cartes[$i];
                 $carteJson[] = $carte->getJson();
-                $terrainJson[] = $terrain[$i]->getJson();
             }
 
-            return $this->json(['carteterrain' => $terrain, 'cartechameau' => $carteJson], 200);
+            return $this->json(['cartechameau' => $carteJson], 200);
         }
         return $this->json('erreur', 500);
     }

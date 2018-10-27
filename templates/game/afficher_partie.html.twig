@@ -160,7 +160,7 @@
                         $('#bloc-suivant').show();
                         for(i = 0; i < cartesSelectedTerrain.length ; i++)
                         {
-                            console.log('carte' + data['cartemain'].id);
+                            console.log('http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier);
                             $('#carte-' + data['cartemain'].id).remove();
                             var chameau = '';
                             if (data['carteterrain'].nom === "Cadillac") {
@@ -222,6 +222,7 @@
     });
 
         $(document).on('click', '#action-terminer', function () {
+            $(this).prop('disabled', true);
             $.ajax({
                 url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
                 method: 'POST'
