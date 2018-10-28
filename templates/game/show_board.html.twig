@@ -88,7 +88,7 @@
 
                 </div>
             </div>
-            <div class="col-sm-12" style="height: 100px">
+            <div id="cadillac" class="col-sm-12" style="height: 100px">
                 {% for card in joueur1.chameaux %}
                     <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau" height="100px" data-carte="{{ card.id }}" />
                 {% endfor %}

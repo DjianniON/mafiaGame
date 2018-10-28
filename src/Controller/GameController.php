@@ -247,6 +247,7 @@ class GameController extends AbstractController
                 {
                     $idcartep = array_pop($pioche);
                     $cartep = $carteRepository->find($idcartep);
+                    $terrainp[] = $cartep;
                     if ($cartep !== null) {
                         $terrain[] = $cartep; //piocher et mettre sur le terrain
                     }
@@ -264,9 +265,10 @@ class GameController extends AbstractController
             {
                 $carte = $cartes[$i];
                 $carteJson[] = $carte->getJson();
+                $terrainJson[] = $terrainp[$i]->getJson();
             }
 
-            return $this->json(['cartechameau' => $carteJson], 200);
+            return $this->json(['carteterrain' => $terrainJson,'cartechameau' => $carteJson], 200);
         }
         return $this->json('erreur', 500);
     }

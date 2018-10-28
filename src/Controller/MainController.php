@@ -27,6 +27,6 @@ class MainController extends Controller
      */
     public function story()
     {
-        return $this->render('story.html.   twig');
+        return $this->render('story.html.twig');
     }
 }

@@ -139,7 +139,6 @@
 
 
         $(document).on('click', '#action-prendre', function () {
-            console.log(cartesSelectedTerrain);
             if (cartesSelectedTerrain.length === 0) {
                 alert('Selectionnez une carte');
             }
@@ -158,7 +157,7 @@
                         console.log(data);
                         $('#bloc-action').hide();
                         $('#bloc-suivant').show();
-                        for(i = 0; i < cartesSelectedTerrain.length ; i++)
+                        if(typeof data['cartemain'] !== 'undefined')
                         {
                             console.log('http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier);
                             $('#carte-' + data['cartemain'].id).remove();
@@ -168,6 +167,27 @@
                             }//ça fonctionne ça ?
                             $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
                             $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
+                        }
+                        else
+                        {
+
+
+                            for(i = 0 ; i < data['cartechameau'].length ; i++)
+                            {
+                                console.log('http://127.0.0.1:8000/cartes/' + typeof data['cartechameau'][i]);
+                                $('#carte-' + data['cartechameau'][i].id).remove();
+                                $('#cadillac').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" class="cartechameau new" height="100px" data-carte="'+data['cartechameau'][i].id+'" />');
+
+                            }
+                            for(i = 0 ; i < data['carteterrain'].length ; i++)
+                            {
+                                var chameau = '';
+                                if (data['carteterrain'][i].nom === "Cadillac") {
+                                    chameau = "chameau";
+                                }
+                                $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'][i].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'][i].id + '" /></div>');
+
+                            }
                         }
 
                     },
