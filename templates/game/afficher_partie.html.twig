@@ -35,6 +35,10 @@
 <script>
     var flag = false;
     var actualise = false;
+    var cartesSelectedTerrain = Array();
+    var cartesSelectedChameau = Array();
+    var cartesSelectedMain = Array();
+
     $(document).ready(function(){
         setInterval(actualisePlateau, 2000);
     });
@@ -93,13 +97,10 @@
             }
         });
 
-        $(document).on('click', '.carteterrain', function () { //C'est pété
+        $(document).on('click', '.carteterrain', function () {
             if($(this).hasClass('chameau'))
             {
-                //for (i = 0; i < $('.carteterrain').hasClass('chameau').length ; i++) {
                 $('.carteterrain').filter('.chameau').each(function(){
-
-
                     if($(this).hasClass('selected'))
                     {
                         $(this).removeClass('selected');
@@ -157,21 +158,19 @@
                         console.log(data);
                         $('#bloc-action').hide();
                         $('#bloc-suivant').show();
-                        if(typeof data['cartemain'] !== 'undefined')
+                        if(typeof data['cartemain'] !== 'undefined')//Prendre une seule carte marchandise
                         {
                             console.log('http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier);
                             $('#carte-' + data['cartemain'].id).remove();
                             var chameau = '';
                             if (data['carteterrain'].nom === "Cadillac") {
                                 chameau = "chameau";
-                            }//ça fonctionne ça ?
+                            }
                             $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
                             $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
                         }
-                        else
+                        else//Prendre les cartes Cadillac
                         {
-
-
                             for(i = 0 ; i < data['cartechameau'].length ; i++)
                             {
                                 console.log('http://127.0.0.1:8000/cartes/' + typeof data['cartechameau'][i]);
@@ -195,7 +194,7 @@
                         if (data === 'erreur7') {
                             alert('Vous avez déjà 7 cartes en main. Vous ne pouvez pas jouer cette action.');
                         } else {
-                            console.log('erreur action prendre');//J'arrive pas à obtenir l'erreur
+                            console.log('erreur action prendre');
                         }
                     }
                 })
@@ -204,11 +203,8 @@
 
     $(document).on('click', '#action-vendre', function () {
         console.log(cartesSelectedMain);
-        if (cartesSelectedTerrain.length === 0) {
+        if (cartesSelectedMain.length === 0) {
             alert('Selectionnez une carte');
-        }
-        else if (cartesSelectedTerrain.length < 1) {
-            alert('Selectionnez une seule carte');
         }
         else {
             console.log('OK');
@@ -219,22 +215,50 @@
                 },
                 method: 'POST',
                 success: function (data) {
-                    console.log('carte' + data['cartemain'].id);
+                    console.log('Jeton'+data['tab3']);
                     $('#bloc-action').hide();
                     $('#bloc-suivant').show();
-                    $('#carte-' + data['cartemain'].id).remove();
-                    var chameau = '';
-                    if (data['carteterrain'].nom === "Cadillac") {
-                        chameau = "chameau";
-                    }//ça fonctionne ça ?
-                    $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
-                    $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
                 },
                 error: function (data) {
-                    if (data === 'erreur7') {
-                        alert('Vous avez déjà 7 cartes en main. Vous ne pouvez pas jouer cette action.');
+                    if (data === 'jetonVide') {
+                        alert('La marchandise que vous tentez d\'obtenir n\'est plus disponible.');
                     } else {
-                        console.log('erreur action prendre');//J'arrive pas à obtenir l'erreur
+                        console.log('erreur action vendre');
+                    }
+                }
+            })
+        }
+    });
+
+    $(document).on('click', '#action-trade', function () {
+        console.log(cartesSelectedMain);
+        if (cartesSelectedTerrain.length <= 1) {
+            alert('Selectionnez au minimum 2 cartes');
+        }
+        else if(cartesSelectedTerrain.length !== (cartesSelectedChameau.length + cartesSelectedMain.length))
+        {
+            alert('Veuillez sélectionner un nombre similaire de cartes à échanger');
+        }
+        else {
+            console.log('OK');
+            $.ajax({
+                url: "{{ path('action_trade', {partie: partie.id}) }}",
+                data: {
+                    cartes: cartesSelectedMain,
+                    terrain: cartesSelectedTerrain,
+                    cadillac: cartesSelectedChameau
+                },
+                method: 'POST',
+                success: function (data) {
+                    console.log();
+                    $('#bloc-action').hide();
+                    $('#bloc-suivant').show();
+                },
+                error: function (data) {
+                    if (data === 'erreur') {
+                        alert('WTF');
+                    } else {
+                        console.log('erreur action vendre');
                     }
                 }
             })

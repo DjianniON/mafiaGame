@@ -41,7 +41,7 @@ class JetonRepository extends ServiceEntityRepository
         $tJetons['Chap_5'] = [];
 
         foreach($jetons as $jeton) {
-            $tJetons[$jeton->getType()->getNom()][] = $jeton->getId();
+            $tJetons[$jeton->getType()->getNom()][] = $jeton;
         }
 
         shuffle($tJetons['Chap_3']);

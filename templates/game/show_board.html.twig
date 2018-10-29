@@ -2,14 +2,14 @@
     <div class="col-sm-4">
         <div class="row">
             <div class="col-sm-12">{% for jeton in partie.tasJeton.Argent %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
                 {% endfor %}</div>
             <div class="col-sm-12">{% for jeton in partie.tasJeton.Cigarette %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
                 {% endfor %}</div>
             <div class="col-sm-12">
                 {% for jeton in partie.tasJeton.Alcool %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
                 {% endfor %}
             </div>
             <div class="col-sm-12">
@@ -17,7 +17,7 @@
                     <div class="col-sm-4">
                         {% for jeton in partie.tasJeton.Chap_3 %}
                             {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px"/>
+                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
                             {% endif %}
 
                         {% endfor %}
@@ -26,7 +26,7 @@
                     <div class="col-sm-4">
                         {% for jeton in partie.tasJeton.Chap_4 %}
                             {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px"/>
+                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
                             {% endif %}
 
                         {% endfor %}
@@ -35,7 +35,7 @@
                     <div class="col-sm-4">
                         {% for jeton in partie.tasJeton.Chap_5 %}
                             {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px"/>
+                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
                             {% endif %}
 
                         {% endfor %}
@@ -45,17 +45,17 @@
             </div>
             <div class="col-sm-12">
                 {% for jeton in partie.tasJeton.Oeuvre %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />{{ loop.index }}
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />{{ loop.index }}
                 {% endfor %}
             </div>
             <div class="col-sm-12">
                 {% for jeton in partie.tasJeton.Arme %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
                 {% endfor %}
             </div>
             <div class="col-sm-12">
                 {% for jeton in partie.tasJeton.Drogue %}
-                    <img src="{{ asset('jetons/'~jetons[jeton].image) }}" height="50px" />
+                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
                 {% endfor %}
             </div>
         </div>
@@ -90,12 +90,12 @@
             </div>
             <div id="cadillac" class="col-sm-12" style="height: 100px">
                 {% for card in joueur1.chameaux %}
-                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau" height="100px" data-carte="{{ card.id }}" />
+                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" />
                 {% endfor %}
             </div>
             <div id="main" class="col-sm-12" style="height: 100px">Mes cartes<br>
                 {% for card in joueur1.main %}
-                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartemain" height="100px" data-carte="{{ card.id }}" />
+                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartemain {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" />
                 {% endfor %}
             </div>
         </div>
@@ -108,7 +108,7 @@
             <button class="btn btn-block btn-danger" id="action-vendre">Vendre</button>
         </div>
         <div class="col-sm-4">
-            <button class="btn btn-block btn-warning" id="action-troquer">Troquer</button>
+            <button class="btn btn-block btn-warning" id="action-trade">Troquer</button>
         </div>
     </div>
     <div class="row" id="bloc-suivant" style="display:none">

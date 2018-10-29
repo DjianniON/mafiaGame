@@ -226,7 +226,7 @@ class GameController extends AbstractController
                 return $this->json('erreur7', 500);
             }
         }
-        else //todo:chameaux
+        else //Traitement pour les chameaux
         {
             $chameaux = $joueur->getChameaux();
             $terrain = array_values($partie->getTerrain());//lalignemagique
@@ -296,29 +296,104 @@ class GameController extends AbstractController
      */
     public function jouerActionVendre(EntityManagerInterface $entityManager,JetonRepository $jetonRepository, CarteRepository $carteRepository, Request $request, Partie $partie){
         $idcarte = $request->request->get('cartes');
-        $carte = null;
-        if(count($idcarte) > 1){
-            for($i= 0 ; $i < count($idcarte); $i++)
+        $alljetons = $partie->getTasJeton();
+        $tabVide = 0;
+        $verifTabJetons = array_values($alljetons);//lalignemagique
+
+        for($i = 0 ; $i < count($verifTabJetons); $i++)
+        {
+            if(count($verifTabJetons[$i]) === 0)
             {
-                $cartes[] = $carteRepository->find($idcarte[$i]);
+                $tabVide += 1;
             }
         }
-        else
-        {
-            $carte = $carteRepository->find($idcarte[0]);
-        }
-
 
         if ($this->getUser() == $partie->getJoueurs()[0]->getUsers()) //Condition de vérification du joueur
         {
             $joueur = $partie->getJoueurs()[0];
-        }
-        else{
+        } else {
             $joueur = $partie->getJoueurs()[1];
         }
 
+        if($tabVide <= 3) {
+            for ($i = 0; $i < count($idcarte); $i++) {
+                $cartes[] = $carteRepository->find($idcarte[$i]);
+            }
+
+            $jetonsJoueur = $joueur->getTasJetons();
+            $nbCartes = count($cartes);
+
+            if ($nbCartes === 3 && count($alljetons['Chap_3']) !== 0) {
+                $jeton = array_pop($alljetons['Chap_3']);
+                $jetonsJoueur[] = $jeton;
+            }
+
+            elseif ($nbCartes === 4 && count($alljetons['Chap_4']) !== 0) {
+                $jeton = array_pop($alljetons['Chap_4']);
+                $jetonsJoueur[] = $jeton;
+            }
+
+            elseif ($nbCartes === 5 && count($alljetons['Chap_5']) !== 0) {
+                $jeton = array_pop($alljetons['Chap_5']);
+                $jetonsJoueur[] = $jeton;
+            }
+
+
+            if(count($alljetons[$cartes[0]->getType()->getNom()]) < 1 && $nbCartes == 2)//Cas où il ne reste qu'un jeton
+                {
+                    $jeton = array_pop($alljetons[$cartes[0]->getType()]);
+                    $jetonsJoueur[] = $jeton;
+                }
+                elseif($cartes[0]->getType()->getNom() === ('Arme' || 'Drogue' || 'Oeuvre'))//Cas des meilleures marchandises
+                {
+                    if(count($alljetons[$cartes[0]->getType()->getNom()]) < 1)//S'il ne reste qu'un jeton
+                        {
+                            $jeton = array_pop($alljetons[$cartes[0]->getType()->getNom()]);
+                            $jetonsJoueur[] = $jeton;
+                        }
+                        else
+                        {
+                            for ($i = 0; $i < $nbCartes; $i++)
+                            {
+                                $jeton = array_pop($alljetons[$cartes[0]->getType()->getNom()]);
+                                $jetonsJoueur[] = $jeton;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for ($i = 0; $i < $nbCartes; $i++)
+                        {
+                            $jeton = array_pop($alljetons[$cartes[0]->getType()->getNom()]);
+                            $jetonsJoueur[] = $jeton;
+                        }
+                    }
+
+                    $joueur->setTasJetons($jetonsJoueur);
+
+            for($i=0;$i<count($jetonsJoueur);$i++)
+            {
+                $token = $jetonsJoueur[$i];
+                $jetonJson[] = $token->getId();
+            }
+            $partie->setStatus(['nbManche' => $partie->getStatus()['nbManche']+1]);
+            $entityManager->flush();
+            return $this->json('Joueur-suivant', 200);
+        }
+        else
+        {
+            $partie->setStatus(['status' => 'F']);
+        }
+        return $this->json(['tab3' => $tabVide], 200);
     }
 
+    /**
+     * @Route("/action-trade/{partie}", name="action_trade")
+     */
+    public function jouerActionTrade(EntityManagerInterface $entityManager, CarteRepository $carteRepository, Request $request, Partie $partie)
+    {
+        //todo: réaliser une récup des cartes, comparer le type (cham ou carte) pour les ranger au bon endroit !
+    }
 
     /**
      * @Route("/liste-partie", name="partie_liste")
