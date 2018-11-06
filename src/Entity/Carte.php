@@ -22,7 +22,7 @@ class Carte
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Type", inversedBy="Cartes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Type", inversedBy="Cartes", fetch="EAGER")
      */
     private $type;
 

@@ -38,6 +38,8 @@
     var cartesSelectedTerrain = Array();
     var cartesSelectedChameau = Array();
     var cartesSelectedMain = Array();
+    var cartesType = Array();
+    var cartesTerrainType = Array();
 
     $(document).ready(function(){
         setInterval(actualisePlateau, 2000);
@@ -60,6 +62,8 @@
                     cartesSelectedTerrain = Array();
                     cartesSelectedChameau = Array();
                     cartesSelectedMain = Array();
+                    cartesType = Array();
+                    cartesTerrainType = Array();
                     actualise = true;
                     $('#attentejoueur').hide();
                 }
@@ -87,13 +91,17 @@
                 $(this).removeClass('selected');
                 //retirer d'un tableau
                 $index = cartesSelectedMain.indexOf($(this).data('carte'));
+                $type = cartesSelectedMain.indexOf($(this).data('type'));
+                cartesType.splice($type, 1);
                 cartesSelectedMain.splice($index, 1);
-                console.log(cartesSelectedMain)
+                console.log(cartesSelectedMain);
             } else {
                 $(this).addClass('selected');
                 //ajouter dans un tableau
                 cartesSelectedMain.push($(this).data('carte'));
-                console.log(cartesSelectedMain)
+                cartesType.push($(this).data('type'));
+                console.log(cartesSelectedMain);
+                console.log(cartesType);
             }
         });
 
@@ -106,7 +114,7 @@
                         $(this).removeClass('selected');
                         //retirer d'un tableau
                         $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
-                        cartesSelectedTerrain.splice($index, 1);
+                        $type = cartesSelectedTerrain.indexOf($(this).data('type'));
                         flag = false;
                         console.log("Cadillac vide :"+cartesSelectedTerrain);
                     }
@@ -124,6 +132,8 @@
                     $(this).removeClass('selected');
                     //retirer d'un tableau
                     $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
+                    cartesTerrainType.splice($type, 1);
+                    cartesSelectedTerrain.splice($type, 1);
                     cartesSelectedTerrain.splice($index, 1);
                     flag = false;
                     console.log("Vide cartes Pacadillac :"+cartesSelectedTerrain)
@@ -131,8 +141,10 @@
                     $(this).addClass('selected');
                     //ajouter dans un tableau
                     cartesSelectedTerrain.push($(this).data('carte'));
+                    cartesTerrainType.push($(this).data('type'));
                     flag = false;
-                    console.log("Mes cartes Pacadillac :"+cartesSelectedTerrain)
+                    console.log("Mes cartes Pacadillac :"+cartesSelectedTerrain);
+                    console.log(cartesTerrainType);
                 }
             }
         });
@@ -156,8 +168,7 @@
                     method: 'POST',
                     success: function (data) {
                         console.log(data);
-                        $('#bloc-action').hide();
-                        $('#bloc-suivant').show();
+
                         if(typeof data['cartemain'] !== 'undefined')//Prendre une seule carte marchandise
                         {
                             console.log('http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier);
@@ -188,7 +199,10 @@
 
                             }
                         }
-
+                        $.ajax({
+                            url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                            method: 'POST'
+                        });
                     },
                     error: function (data) {
                         if (data === 'erreur7') {
@@ -206,72 +220,187 @@
         if (cartesSelectedMain.length === 0) {
             alert('Selectionnez une carte');
         }
-        else {
-            console.log('OK');
-            $.ajax({
-                url: "{{ path('action_vendre', {partie: partie.id}) }}",
-                data: {
-                    cartes: cartesSelectedMain
-                },
-                method: 'POST',
-                success: function (data) {
-                    console.log('Jeton'+data['tab3']);
-                    $('#bloc-action').hide();
-                    $('#bloc-suivant').show();
-                },
-                error: function (data) {
-                    if (data === 'jetonVide') {
-                        alert('La marchandise que vous tentez d\'obtenir n\'est plus disponible.');
-                    } else {
-                        console.log('erreur action vendre');
+        else if(cartesSelectedMain.length === 1)//Cas de 1 carte Main
+        {
+            if(cartesType[0] === ('Arme' || 'Drogue' || 'Oeuvre' ))
+            {
+                alert('Il faut au minimum 2 cartes pour cette vente !');
+            }
+            else
+            {
+                $.ajax({
+                    url: "{{ path('action_vendre', {partie: partie.id}) }}",
+                    data: {
+                        cartes: cartesSelectedMain
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        console.log('Jeton' + data['jetons']);
+                        for(i = 0; i < data['cartemain'].length ; i++)
+                        {
+                            $('#carte-' + data['cartemain'][i].id).remove();
+                        }
+
+                        $.ajax({
+                            url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                            method: 'POST'
+                        });
+                    },
+                    error: function (data) {
+                        if (data === 'jetonVide') {
+                            alert('La marchandise que vous tentez d\'obtenir n\'est plus disponible.');
+                        } else {
+                            console.log('erreur action vendre');
+                        }
                     }
+                })
+            }
+        }
+        else {//Cas de plusieurs cartes
+            console.log(cartesType.length);
+            var flag = false;
+            for(i = 0; i < cartesType.length ; i++)
+            {
+                if(cartesType[i] !== cartesType[0])
+                {
+                    console.log('tokenF' + cartesType[i]);
+                    flag = false;
+                    alert('Veuillez sélectionner le même type de carte !');
+                    break;
                 }
-            })
+                else
+                {
+                    console.log('token' + cartesType[i]);
+                    flag = true;
+                }
+            }
+            console.log('OK');
+            console.log(flag);
+            if(flag === true) {
+                $.ajax({
+                    url: "{{ path('action_vendre', {partie: partie.id}) }}",
+                    data: {
+                        cartes: cartesSelectedMain
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        console.log('Jeton' + data['jetons']);
+                        console.log(data['cartemain']);
+                        for(i = 0; i < data['cartemain'].length ; i++)
+                        {
+                            $('#carte-' + data['cartemain'][i].id).remove();
+                        }
+
+
+                        $.ajax({
+                            url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                            method: 'POST'
+                        });
+                    },
+                    error: function (data) {
+                        if (data === 'jetonVide') {
+                            alert('La marchandise que vous tentez d\'obtenir n\'est plus disponible.');
+                        } else {
+                            console.log('erreur action vendre');
+                        }
+                    }
+                })
+            }
+
         }
     });
 
     $(document).on('click', '#action-trade', function () {
-        console.log(cartesSelectedMain);
-        if (cartesSelectedTerrain.length <= 1) {
+        console.log('lg :'+ {{ partie.joueurs[0].main|length }} + cartesSelectedChameau.length);
+        if (cartesSelectedTerrain.length <= 1   ) {
             alert('Selectionnez au minimum 2 cartes');
         }
         else if(cartesSelectedTerrain.length !== (cartesSelectedChameau.length + cartesSelectedMain.length))
         {
             alert('Veuillez sélectionner un nombre similaire de cartes à échanger');
         }
+        else if({{ partie.joueurs[0].main|length }} + cartesSelectedChameau.length > 7)
+        {
+            alert('Trop de cartes chameaux sélectionnées !');
+        }
         else {
             console.log('OK');
-            $.ajax({
-                url: "{{ path('action_trade', {partie: partie.id}) }}",
-                data: {
-                    cartes: cartesSelectedMain,
-                    terrain: cartesSelectedTerrain,
-                    cadillac: cartesSelectedChameau
-                },
-                method: 'POST',
-                success: function (data) {
-                    console.log();
-                    $('#bloc-action').hide();
-                    $('#bloc-suivant').show();
-                },
-                error: function (data) {
-                    if (data === 'erreur') {
-                        alert('WTF');
-                    } else {
-                        console.log('erreur action vendre');
+            var flag = false;
+            var type = null;
+            for(i = 0; i < cartesTerrainType.length ; i++)
+            {
+                type = cartesTerrainType[0];
+                for(i = 0 ; i < cartesType.length ; i++)
+                {
+                    if(cartesType[0] !== type)
+                    {
+                        flag = true;
+                    }
+                    else
+                    {
+                        flag = false;
+                        break;
                     }
                 }
-            })
+            }
+            if(flag === false)
+            {
+                alert('Choisissez des types différents de cartes terrain par rapport à votre main !');
+            }
+            else {
+                $.ajax({
+                    url: "{{ path('action_trade', {partie: partie.id}) }}",
+                    data: {
+                        cartes: cartesSelectedMain,
+                        terrain: cartesSelectedTerrain,
+                        cadillac: cartesSelectedChameau
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data['cartemain']);
+                        for(i = 0; i < data['cartemain'].length ; i++)
+                        {
+                            $('#carte-' + data['cartemain'][i].id).remove();
+                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartemain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartemain'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartemain'][i].id + '" /></div>');
+
+                        }
+                        for(i = 0; i < data['carteterrain'].length ; i++)
+                        {
+                            $('#carte-' + data['carteterrain'][i].id).remove();
+                            $('#main').append('<div class="col-sm-2" id="carte-' + data['carteterrain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['carteterrain'][i].id + '" /></div>');
+
+                        }
+                        for(i = 0; i < data['cartechameau'].length ; i++)
+                        {
+                            $('#carte-' + data['cartechameau'][i].id).remove();
+                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartechameau'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartechameau'][i].id + '" /></div>');
+                        }
+
+
+                        $.ajax({
+                            url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                            method: 'POST'
+                        });
+                    },
+                    error: function (data) {
+                        if (data === 'erreur') {
+                            alert('WTF');
+                        } else {
+                            console.log('erreur action trade');
+                        }
+                    }
+                })
+            }
         }
     });
 
-        $(document).on('click', '#action-terminer', function () {
+        /*$(document).on('click', '#action-terminer', function () {
             $(this).prop('disabled', true);
             $.ajax({
-                url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
+                url: "{ path('jouer_action_suivant', {partie: partie.id}) }}",
                 method: 'POST'
             });
-        });
+        });*/
 
 </script>
 {% endblock %}

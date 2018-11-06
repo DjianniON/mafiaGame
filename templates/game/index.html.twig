@@ -1,20 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+        <a href="{{ path('partie_creer') }}">Créer une partie</a>
+    <h2>Mes Parties en cours</h2>
+<ul>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% if games is defined %}
+    {% for game in games %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/GameController.php'|file_link(0) }}">src/Controller/GameController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/game/index.html.twig'|file_link(0) }}">templates/game/index.html.twig</a></code></li>
-    </ul>
-</div>
+        {% if game.joueurs[0].users.username == app.user.username %}
+            {% set joueur = game.joueurs[1].users.username %}
+        {% else %}
+            {% set joueur = game.joueurs[0].users.username %}
+        {% endif %}
+
+    {% if game.joueurs[0].users.username or game.joueurs[1].users.username == app.user.username %}
+        <li>Partie contre : {{ joueur }} || Manche : {{ game.status['nbManche'] }} || Tour : {{ game.status['nbTour'] }} <a href="{{ path('show_game', {'partie': game.id}) }}">Rejoindre la partie</a></li>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <p>Pas de partie en cours !</p>
+    {% endif %}
+</ul>
 {% endblock %}
