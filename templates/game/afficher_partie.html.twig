@@ -68,6 +68,9 @@
                     $('#attentejoueur').hide();
                 }
             }
+            else{
+                window.location.replace(etat);
+            }
         });
     }
 
@@ -76,13 +79,17 @@
                 $(this).removeClass('selected');
                 //retirer d'un tableau
                 $index = cartesSelectedChameau.indexOf($(this).data('carte'));
+                $type = cartesSelectedMain.indexOf($(this).data('type'));
+                cartesType.splice($type, 1);
                 cartesSelectedChameau.splice($index, 1);
                 console.log(cartesSelectedChameau)
             } else {
                 $(this).addClass('selected');
                 //ajouter dans un tableau
                 cartesSelectedChameau.push($(this).data('carte'));
-                console.log(cartesSelectedChameau)
+                cartesType.push($(this).data('type'));
+                console.log(cartesType);
+                console.log(cartesSelectedChameau);
             }
         });
 
@@ -115,6 +122,8 @@
                         //retirer d'un tableau
                         $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
                         $type = cartesSelectedTerrain.indexOf($(this).data('type'));
+                        cartesTerrainType.splice($type, 1);
+                        cartesSelectedTerrain.splice($index, 1);
                         flag = false;
                         console.log("Cadillac vide :"+cartesSelectedTerrain);
                     }
@@ -122,8 +131,10 @@
                         $(this).addClass('selected');
                         //ajouter dans un tableau
                         cartesSelectedTerrain.push($(this).data('carte'));
+                        cartesTerrainType.push($(this).data('type'));
                         flag = true;
-                        console.log("Mes cartes Cadillac :"+cartesSelectedTerrain)
+                        console.log("Mes cartes Cadillac :"+cartesSelectedTerrain);
+                        console.log(cartesTerrainType);
                     }
                 });
             }
@@ -132,8 +143,8 @@
                     $(this).removeClass('selected');
                     //retirer d'un tableau
                     $index = cartesSelectedTerrain.indexOf($(this).data('carte'));
+                    $type = cartesSelectedTerrain.indexOf($(this).data('type'));
                     cartesTerrainType.splice($type, 1);
-                    cartesSelectedTerrain.splice($type, 1);
                     cartesSelectedTerrain.splice($index, 1);
                     flag = false;
                     console.log("Vide cartes Pacadillac :"+cartesSelectedTerrain)
@@ -217,12 +228,14 @@
 
     $(document).on('click', '#action-vendre', function () {
         console.log(cartesSelectedMain);
+        console.log(cartesSelectedMain.length);
+        console.log(cartesType[0]);
         if (cartesSelectedMain.length === 0) {
             alert('Selectionnez une carte');
         }
         else if(cartesSelectedMain.length === 1)//Cas de 1 carte Main
         {
-            if(cartesType[0] === ('Arme' || 'Drogue' || 'Oeuvre' ))
+            if(cartesType[0] === 'Arme' || cartesType[0] ===  'Drogue' || cartesType[0] ===  'Oeuvre' )
             {
                 alert('Il faut au minimum 2 cartes pour cette vente !');
             }
@@ -236,9 +249,11 @@
                     method: 'POST',
                     success: function (data) {
                         console.log('Jeton' + data['jetons']);
+                        console.log('tab'+ data['tab']);
+                        console.log('alljet'+data['alljetons']);
                         for(i = 0; i < data['cartemain'].length ; i++)
                         {
-                            $('#carte-' + data['cartemain'][i].id).remove();
+                            $('#carte-' + data['cartemain'][i]).remove();
                         }
 
                         $.ajax({
@@ -284,13 +299,15 @@
                     },
                     method: 'POST',
                     success: function (data) {
+                        console.log('tab'+ data['tab']);
+                        console.log('alljet'+data['alljetons']);
                         console.log('Jeton' + data['jetons']);
                         console.log(data['cartemain']);
+
                         for(i = 0; i < data['cartemain'].length ; i++)
                         {
-                            $('#carte-' + data['cartemain'][i].id).remove();
+                            $('#carte-' + data['cartemain'][i]).remove();
                         }
-
 
                         $.ajax({
                             url: "{{ path('jouer_action_suivant', {partie: partie.id}) }}",
@@ -311,33 +328,32 @@
     });
 
     $(document).on('click', '#action-trade', function () {
-        console.log('lg :'+ {{ partie.joueurs[0].main|length }} + cartesSelectedChameau.length);
-        if (cartesSelectedTerrain.length <= 1   ) {
+
+        if (cartesSelectedTerrain.length <= 1) {
             alert('Selectionnez au minimum 2 cartes');
+            console.log('lg :'+ {{ partie.joueurs[0].main|length }} + cartesSelectedChameau.length);
         }
         else if(cartesSelectedTerrain.length !== (cartesSelectedChameau.length + cartesSelectedMain.length))
         {
             alert('Veuillez sélectionner un nombre similaire de cartes à échanger');
         }
-        else if({{ partie.joueurs[0].main|length }} + cartesSelectedChameau.length > 7)
+        else if({% if partie.joueurs[0].users.username == app.user.username %}{{ partie.joueurs[0].main|length }}{% else %}{{ partie.joueurs[1].main|length }}{% endif %} + cartesSelectedChameau.length > 7)
         {
             alert('Trop de cartes chameaux sélectionnées !');
         }
         else {
-            console.log('OK');
+            console.log('OK1');
             var flag = false;
-            var type = null;
-            for(i = 0; i < cartesTerrainType.length ; i++)
-            {
-                type = cartesTerrainType[0];
-                for(i = 0 ; i < cartesType.length ; i++)
-                {
-                    if(cartesType[0] !== type)
-                    {
+            var type = "";
+            for (i = 0; i < cartesTerrainType.length; i++) {
+                type = cartesTerrainType[i];
+                console.log('type'+type);
+                for (j = 0; j < cartesType.length; j++) {
+                    console.log('2emetype'+cartesType[j]);
+                    if(cartesType[j] !== type) {
                         flag = true;
                     }
-                    else
-                    {
+                    else {
                         flag = false;
                         break;
                     }
@@ -357,12 +373,12 @@
                     },
                     method: 'POST',
                     success: function (data) {
-                        console.log(data['cartemain']);
-                        for(i = 0; i < data['cartemain'].length ; i++)
-                        {
-                            $('#carte-' + data['cartemain'][i].id).remove();
-                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartemain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartemain'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartemain'][i].id + '" /></div>');
+                        if(typeof data['cartemain'] !== 'undefined') {
+                            for (i = 0; i < data['cartemain'].length; i++) {
+                                $('#carte-' + data['cartemain'][i].id).remove();
+                                $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartemain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartemain'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartemain'][i].id + '" /></div>');
 
+                            }
                         }
                         for(i = 0; i < data['carteterrain'].length ; i++)
                         {
@@ -370,10 +386,11 @@
                             $('#main').append('<div class="col-sm-2" id="carte-' + data['carteterrain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['carteterrain'][i].id + '" /></div>');
 
                         }
-                        for(i = 0; i < data['cartechameau'].length ; i++)
-                        {
-                            $('#carte-' + data['cartechameau'][i].id).remove();
-                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartechameau'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartechameau'][i].id + '" /></div>');
+                        if(typeof data['cartechameau'] !== 'undefined') {
+                            for (i = 0; i < data['cartechameau'].length; i++) {
+                                $('#carte-' + data['cartechameau'][i].id).remove();
+                                $('#terrain').append('<div class="col-sm-2" id="carte-' + data['cartechameau'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" height="100px" class="carteterrain new"  data-carte="' + data['cartechameau'][i].id + '" /></div>');
+                            }
                         }
 
 

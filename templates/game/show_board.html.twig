@@ -90,7 +90,7 @@
             </div>
             <div id="cadillac" class="col-sm-12" style="height: 100px">
                 {% for card in joueur1.chameaux %}
-                    <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" />
+                    <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" data-type="{{ card.type.nom }}"/>
                 {% endfor %}
             </div>
             <div id="main" class="col-sm-12" style="height: 100px">Mes cartes<br>
@@ -112,6 +112,6 @@
         </div>
     </div>
     <div class="row" id="bloc-suivant" style="display:none">
-        <button class="btn btn-block btn-success" id="action-terminer">Terminer mon tour</button>
+        <button class="btn btn-block btn-success">Action terminée</button>
     </div>
 </div>

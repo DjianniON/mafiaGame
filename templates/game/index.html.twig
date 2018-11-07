@@ -16,8 +16,9 @@
             {% set joueur = game.joueurs[0].users.username %}
         {% endif %}
 
-    {% if game.joueurs[0].users.username or game.joueurs[1].users.username == app.user.username %}
-        <li>Partie contre : {{ joueur }} || Manche : {{ game.status['nbManche'] }} || Tour : {{ game.status['nbTour'] }} <a href="{{ path('show_game', {'partie': game.id}) }}">Rejoindre la partie</a></li>
+    {% if game.joueurs[0].users.username == app.user.username or game.joueurs[1].users.username == app.user.username %}
+        <li>Partie contre : {{ joueur }} || Manche : {{ game.status['nbManche'] }} || Tour : {{ game.status['nbTour'] }} {% if game.status['status'] == 'G' %}
+        <a href="{{ path('partie_finie',{'partie':game.id}) }}">Voir les stats</a>{% else %}<a href="{{ path('show_game', {'partie': game.id}) }}">Rejoindre la partie</a>{% endif %}</li>
     {% endif %}
     {% endfor %}
     {% else %}

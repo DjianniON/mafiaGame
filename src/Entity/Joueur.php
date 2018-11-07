@@ -35,7 +35,7 @@ class Joueur
     private $tasJetons = [];
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      */
     private $score;
 
@@ -97,12 +97,12 @@ class Joueur
         return $this;
     }
 
-    public function getScore(): ?float
+    public function getScore(): ?int
     {
         return $this->score;
     }
 
-    public function setScore(float $score): self
+    public function setScore(int $score): self
     {
         $this->score = $score;
 

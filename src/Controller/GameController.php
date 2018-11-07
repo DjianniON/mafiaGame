@@ -117,7 +117,7 @@ class GameController extends AbstractController
             $em->persist($game);
             $em->flush();
 
-            return $this->redirectToRoute('show_game', ['partie' => $game->getId()]);
+            $this->redirectToRoute('show_game', ['partie' => $game->getId()]);
         }
         return $this->render('game/creer-partie.html.twig', [
             'joueurs' => $userRepository->findAll()
@@ -128,7 +128,12 @@ class GameController extends AbstractController
      * @Route("/show-game/{partie}", name="show_game")
      */
     public function afficherPartie(Partie $partie) {
-        return $this->render('game/afficher_partie.html.twig', ['partie' => $partie]);
+        if($partie->getStatus()['status'] !== 'G')
+        {
+            return $this->render('game/afficher_partie.html.twig', ['partie' => $partie]);
+        }
+        return $this->redirectToRoute('partie_finie',['partie' => $partie->getId()]);
+
     }
 
     /**
@@ -145,9 +150,28 @@ class GameController extends AbstractController
     /**
      * @Route("/actualise-plateau/{partie}", name="actualise_plateau")
      */
-    public function actualisePlateau(Partie $partie, JetonRepository $jetonRepository, CarteRepository $carteRepository) {
-        //$partie->getStatus()['status'];
-        if($partie->getStatus(['status']) !== 'F') {//todo:strange behaviour => ça me retourne bien 'T' quand j'utilise la ligne au dessus...
+    public function actualisePlateau(Partie $partie, JetonRepository $jetonRepository, CarteRepository $carteRepository, EntityManagerInterface $entityManager) {
+        $p1 = $partie->getJoueurs()[0];
+        $p2 = $partie->getJoueurs()[1];
+        if($p1->getScore() === 2 || $p2->getScore() === 2 || $partie->getStatus()['status'] === 'G')
+        {
+            $partie->setStatus(['status' => 'G', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
+            if($p1->getScore() > $p2->getScore())
+            {
+                $user1 = $p1->getUsers();
+                $user1->setNbVictoires($user1->getNbVictoires()+1);
+                $this->GenerateElo($user1,$partie);
+            }
+            else
+            {
+                $user1 = $p1->getUsers();
+                $user1->setNbVictoires($user1->getNbVictoires()+1);
+                $this->GenerateElo($user1,$partie);
+            }
+            $entityManager->flush();
+            return $this->json($this->generateUrl('partie_finie',['partie' => $partie->getId()]));
+        }
+        if($partie->getStatus()['status'] !== 'F') {
             if ($this->getUser() == $partie->getJoueurs()[0]->getUsers()) {
                 switch ($partie->getMainJoueur()) {
                     //tester si je suis J1 ou J2 et en fonction adapter les return.
@@ -172,8 +196,6 @@ class GameController extends AbstractController
         }
         else//todo:scoring
         {
-            $p1 = $partie->getJoueurs()[0];
-            $p2 = $partie->getJoueurs()[1];
             $p1Jetons = $p1->getTasJetons();
             $p2Jetons = $p2->getTasJetons();
             $p1Merch = 0;
@@ -207,7 +229,7 @@ class GameController extends AbstractController
             for($i=0; $i < count($p2Jetons);$i++)
             {
                 $p2Total += $p2Jetons[$i]->getValeur();
-                if($p2Jetons[$i]->getType()->getNom() === ('Chap_3' || 'Chap_4' || 'Chap_5'))
+                if($p2Jetons[$i]->getType()->getNom() === ('Chap_3' || 'Chap_4' || 'Chap_5'))//todo:ça fonctionne cette écriture ?
                 {
                     $p2Chap += 1;
                 }
@@ -252,19 +274,13 @@ class GameController extends AbstractController
                 $score = $p2->getScore() + 1;
                 $p2->setScore($score);
             }
+             $entityManager->flush();
 
             if($p1->getScore() === 2 || $p2->getScore() === 2)
             {
-                if($p1->getScore() > $p2->getScore())
-                {
-                    //todo:retourner la page de victoire P1
-                }
-                else
-                {
-                    //todo:victoire P2
-                }
+                return $this->json($this->generateUrl('partie_finie',['partie' => $partie->getId()]));
             }
-            else//todo:attention ici, regénération de partie à surveiller !
+            else//Génération PARTIE MANCHE + 1
             {
                 $partie->setStatus(['status' => 'T', 'nbManche' => $partie->getStatus()['nbManche'] + 1, 'nbTour' => 1]);
                 $partie->setDefausse(false);
@@ -299,7 +315,6 @@ class GameController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $p1->setMain($tMain);
                 $p1->setChameaux($tChameau);
-                $p1->setScore(0);
                 $p1->setTasJetons([]);
                 $tMain = [];
                 $tChameau = [];
@@ -316,7 +331,6 @@ class GameController extends AbstractController
 
                 $p2->setMain($tMain);
                 $p2->setChameaux($tChameau);
-                $p2->setScore(0);
                 $p2->setTasJetons([]);
 
                 $partie->setMainJoueur(true);//todo:loser
@@ -335,8 +349,6 @@ class GameController extends AbstractController
                 $em->flush();
                 return $this->json('good',200);
             }
-
-
         }
         return $this->json('erreur',500);
     }
@@ -387,7 +399,7 @@ class GameController extends AbstractController
                 }
                 else
                 {
-                    $partie->setStatus(['status' => 'F']);
+                    $partie->setStatus(['status' => 'F', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
                 }
                 $joueur->setMain($main);
                 $partie->setTerrain($terrain);
@@ -427,7 +439,7 @@ class GameController extends AbstractController
             }
             else
             {
-                $partie->setStatus(['status' => 'F']);
+                $partie->setStatus(['status' => 'F', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
             }
             $joueur->setChameaux($chameaux);
             $partie->setTerrain($terrain);
@@ -471,7 +483,7 @@ class GameController extends AbstractController
         $idcarte = $request->request->get('cartes');
         $alljetons = $partie->getTasJeton();
         $tabVide = 0;
-        $verifTabJetons = array_values($alljetons);//lalignemagique
+        $verifTabJetons = array_values($partie->getTasJeton());//lalignemagique
 
         for($i = 0 ; $i < count($verifTabJetons); $i++)
         {
@@ -490,7 +502,7 @@ class GameController extends AbstractController
 
         $mainJoueur = array_values($joueur->getMain());
 
-        if($tabVide <= 3) {
+        if($tabVide < 3) {
             for ($i = 0; $i < count($idcarte); $i++) {
                 $cartes[] = $carteRepository->find($idcarte[$i]);
             }
@@ -517,14 +529,17 @@ class GameController extends AbstractController
             }
 
 
-            if(count($alljetons[$cartes[0]->getType()->getNom()]) < 1 && $nbCartes == 2)//Cas où il ne reste qu'un jeton
+            if(count($alljetons[$cartes[0]->getType()->getNom()]) === $nbCartes - 1)//Cas où il ne reste qu'un jeton
                 {
-                    $jeton = array_pop($alljetons[$cartes[0]->getType()]);
-                    $jetonsJoueur[] = $jeton;
+                    for($i = 0; $i < count($alljetons[$cartes[0]->getType()->getNom()]); $i++)
+                    {
+                        $jeton = array_pop($alljetons[$cartes[0]->getType()->getNom()]);
+                        $jetonsJoueur[] = $jeton;
+                    }
                 }
-                elseif($cartes[0]->getType()->getNom() === ('Arme' || 'Drogue' || 'Oeuvre'))//Cas des meilleures marchandises
+                elseif($cartes[0]->getType()->getNom() === 'Arme' || $cartes[0]->getType()->getNom() === 'Drogue' || $cartes[0]->getType()->getNom() === 'Oeuvre')//Cas des meilleures marchandises
                 {
-                    if(count($alljetons[$cartes[0]->getType()->getNom()]) < 1)//S'il ne reste qu'un jeton
+                    if(count($alljetons[$cartes[0]->getType()->getNom()]) <= 1)//S'il ne reste qu'un jeton
                         {
                             $jeton = array_pop($alljetons[$cartes[0]->getType()->getNom()]);
                             $jetonsJoueur[] = $jeton;
@@ -540,7 +555,11 @@ class GameController extends AbstractController
                             }
                         }
                     }
-                    else
+                    elseif(count($alljetons[$cartes[0]->getType()->getNom()]) < $nbCartes)
+                    {
+                        return $this->json('jetonVide', 500);
+                    }
+                    else//le reste
                     {
                         for ($i = 0; $i < $nbCartes; $i++)
                         {
@@ -560,22 +579,24 @@ class GameController extends AbstractController
             for($i=0;$i<count($mainJoueur);$i++)
             {
                 $mainId[] = $mainJoueur[$i]->getId();
-                $mainJson[] = $mainJoueur[$i]->getJson();
             }
             for($i=0;$i<$nbCartes;$i++)
             {
                 $carteId = $cartes[$i]->getId();
+                $mainJson[] = $carteId;
                 $index = array_search($carteId, $mainId);//todo:vérifier ça
                 unset($mainJoueur[$index]); //on retire
             }
             $joueur->setMain($mainJoueur);
             $partie->setTasJeton($alljetons);
             $entityManager->flush();
-            return $this->json(['jetons' => $jetonJson, 'cartemain' => $mainJson], 200);
+            return $this->json(['jetons' => $jetonJson, 'cartemain' => $mainJson,'tab' => $tabVide, 'alljetons' => $alljetons], 200);
         }
         else
         {
-            $partie->setStatus(['status' => 'F']);
+            $partie->setStatus(['status' => 'F', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
+            $entityManager->flush();
+            return $this->json('fin Manche', 200);
         }
         return $this->json('erreur', 500);
     }
@@ -686,12 +707,61 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/liste-partie/{player}", name="partie_liste")
+     * @Route("/game-finished/{partie}", name="partie_finie")
      */
-    public function listePartie(PartieRepository $partieRepository)
+    public function partieFinie(Partie $partie)
     {
-        //$games = $partieRepository->findBy([['Joueurs'][0] => $player]);
-
+        if($partie->getStatus()['status'] === 'G')
+        {
+            $p1 = $partie->getJoueurs()[0];
+            $p2 = $partie->getJoueurs()[1];
+            if($p1->getScore() > $p2->getScore())
+            {
+                $player = $p1;
+            }
+            else
+            {
+                $player = $p2;
+            }
+            return $this->render('game/victory.html.twig',['player' => $player]);
+        }
+        else
+        {
+            return $this->render('game/error.html.twig');
+        }
     }
+
+    private function GenerateElo(\App\Entity\User $user1, Partie $partie)
+    {
+        $elop1 = $user1->getElo();
+        if($user1 === $partie->getJoueurs()[0])
+        {
+            $score = $partie->getJoueurs()[1]->getScore();
+            $user2 = $partie->getJoueurs()[1]->getUsers();
+        }
+        else
+        {
+            $score = $partie->getJoueurs()[0]->getScore();
+            $user2 = $partie->getJoueurs()[0]->getUsers();
+        }
+        if($score === 0)
+        {
+            $user1->setElo($elop1 + 40);
+
+            $user2->setElo($user2->getElo() - 20);
+        }
+        else
+        {
+            $user1->setElo($elop1 + 20);
+            $user2->setElo($user2->getElo() - 10);
+        }
+        if($user2->getElo() <= 0)
+        {
+            $user2->setElo(0);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+    }
+
 
 }
