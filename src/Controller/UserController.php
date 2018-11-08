@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User1Type;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -96,5 +97,18 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/ban/{id}", name="user_ban")
+     */
+    public function ban($id, UserRepository $userRepository,EntityManagerInterface $entityManager)
+    {
+        $user = $userRepository->find($id);
+        $user->setRoles(['ROLE_BANNED']);
+        $entityManager->flush();
+
+        return $this->render('user/index.html.twig', ['users' => $userRepository->findAll()]);
+
     }
 }

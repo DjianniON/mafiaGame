@@ -584,6 +584,76 @@ LADER
 }
 
 /*
+CREATE GAME
+ */
+/* line 424, ../sass/_base.scss */
+.crea-p {
+  margin-bottom: 50px;
+}
+/* line 427, ../sass/_base.scss */
+.crea-p form label {
+  display: none;
+}
+/* line 430, ../sass/_base.scss */
+.crea-p form select {
+  color: white;
+  background-color: black;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 1.5rem;
+}
+/* line 437, ../sass/_base.scss */
+.crea-p form .button {
+  font-size: 2.5rem;
+  padding: 10px;
+}
+/* line 441, ../sass/_base.scss */
+.crea-p form .vs {
+  font-size: 3em;
+  color: white;
+}
+
+/*
+MY GAMES
+ */
+/* line 451, ../sass/_base.scss */
+.mes-p h2 {
+  border-bottom: 1px solid #B0A73F;
+  width: auto;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 30px;
+}
+/* line 458, ../sass/_base.scss */
+.mes-p div {
+  vertical-align: top;
+}
+/* line 461, ../sass/_base.scss */
+.mes-p a {
+  width: 50%;
+}
+/* line 463, ../sass/_base.scss */
+.mes-p a img {
+  width: inherit;
+}
+/* line 467, ../sass/_base.scss */
+.mes-p li {
+  font-size: 1.5rem;
+  color: white;
+  line-height: 1.5rem;
+  text-align: left;
+  padding-left: 20px;
+  position: relative;
+}
+/* line 474, ../sass/_base.scss */
+.mes-p li img {
+  height: 2.8rem;
+  position: absolute;
+  left: -10px;
+  top: -6px;
+}
+
+/*
 @media (max-width: 600px) {
   .menu{
     .decoration{

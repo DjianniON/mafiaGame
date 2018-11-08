@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+        <a href="{{ path('partie_creer') }}">Créer une partie</a>
+    <h2>Mes Parties en cours</h2>
+<ul>
+
+    {% if games is defined %}
+    {% for game in games %}
+
+        {% if game.joueurs[0].users.username == app.user.username %}
+            {% set joueur = game.joueurs[1].users.username %}
+        {% else %}
+            {% set joueur = game.joueurs[0].users.username %}
+        {% endif %}
+
+    {% if game.joueurs[0].users.username == app.user.username or game.joueurs[1].users.username == app.user.username %}
+        <li>Partie contre : {{ joueur }} || Manche : {{ game.status['nbManche'] }} || Tour : {{ game.status['nbTour'] }} {% if game.status['status'] == 'G' %}
+        <a href="{{ path('partie_finie',{'partie':game.id}) }}">Voir les stats</a>{% else %}<a href="{{ path('show_game', {'partie': game.id}) }}">Rejoindre la partie</a>{% endif %}</li>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <p>Pas de partie en cours !</p>
+    {% endif %}
+</ul>
+{% endblock %}
