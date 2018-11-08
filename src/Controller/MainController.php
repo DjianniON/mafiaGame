@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Repository\JoueurRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,8 +44,18 @@ class MainController extends Controller
     /**
      * @Route("/ladder", name="ladder")
      */
-    public function lader()
+    public function ladder(UserRepository $userRepository)
     {
-        return $this->render('ladder.html.twig');
+        $joueurs = $userRepository->findByScore();
+        for($i = 0; $i < count($joueurs); $i++)
+        {
+            if($joueurs[$i]->getRoles()[0] === 'ROLE_BANNED')
+            {
+                $banned = $joueurs[$i];
+                $index = array_search($banned, $joueurs);
+                unset($joueurs[$index]);
+            }
+        }
+        return $this->render('ladder.html.twig',['joueurs' => $joueurs]);
     }
 }

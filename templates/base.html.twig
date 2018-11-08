@@ -10,85 +10,87 @@
         {% endblock %}
     </head>
     <body>
-        <header>
-                <div class="decoration">
-                        <div class="back col-9 col-sm-4">
-                        </div>
-                    {% if app.user.username is defined %}
-                        {% if is_granted('ROLE_USER')%}
-                            <nav class="col-11 col-sm-4">
-                                <a href="{{ path('index')}}"> {{ app.user.username }}</a>
-                                <span>|</span>
-                                <a href="{{ path('security_logout')}}"> Se déconnecter</a>
-                            </nav>
-                        {% elseif is_granted('ROLE_BANNED') %}
-                            <nav class="col-11 col-sm-4">
-                                <a href="#">UTILISATEUR BANNI</a>
-                                <span>|</span>
-                                <a href="{{ path('security_logout')}}"> Se déconnecter</a>
-                            </nav>
-                        {% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
-                            <nav class="col-11 col-sm-4">
-                                <a href="{{ path('admin_index')}}"> Admin</a>
-                                <span>|</span>
-                                <a href="{{ path('security_logout')}}"> Se déconnecter</a>
-                            </nav>
-                        {% endif %}
-                    {% else %}
-                        <nav class="col-11 col-sm-4">
-                            <a href="{{ path('security_login')}}"> Connexion</a>
-                            <span>|</span>
-                            <a href="{{ path('user_registration')}}"> Inscription</a>
-                        </nav>
-                    {% endif %}
-                    <a href="{{ path('index') }}"><img class="bandes top col-11 col-sm-4" src="{{ asset('img/h1.png') }}"></a>
-                        <span><img class="logo col-6 col-sm-2" src="{{ asset('img/logo_jeu.svg') }}"></span>
-                        <img class="bandes col-11 col-sm-4" src="{{ asset('img/h1.png') }}">
+        <main>
+            <div class="flex-grow">
+                <header>
+                    <div class="decoration">
+                        <div class="col-12 col-sm-4 absolute-right">
+                            {% if app.user.username is defined %}
+                                {% if is_granted('ROLE_USER')%}
+                                    <nav>
+                                        <a href="{{ path('index')}}"> {{ app.user.username }}</a>
+                                        <span>|</span>
+                                        <a href="{{ path('security_logout')}}"> Se déconnecter</a>
+                                    </nav>
+                                {% elseif is_granted('ROLE_BANNED') %}
+                                    <nav>
+                                        <a href="#">UTILISATEUR BANNI</a>
+                                        <span>|</span>
+                                        <a href="{{ path('security_logout')}}"> Se déconnecter</a>
+                                    </nav>
+                                {% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+                                    <nav>
+                                        <a href="{{ path('admin_index')}}"> Admin</a>
+                                        <span>|</span>
+                                        <a href="{{ path('security_logout')}}"> Se déconnecter</a>
+                                    </nav>
+                                {% endif %}
+                            {% else %}
+                                <nav>
+                                    <a href="{{ path('security_login')}}"> Connexion</a>
+                                    <span>|</span>
+                                    <a href="{{ path('user_registration')}}"> Inscription</a>
+                                </nav>
+                            {% endif %}
+                    </div>
+                    <img class="bandes top col-11 col-sm-4" src="{{ asset('img/h1.png') }}">
+                    <span><a href="{{ path('index')}}"><img class="logo col-6 col-sm-2" src="{{ asset('img/logo_jeu.svg') }}"></a></span>
+                    <img class="bandes col-11 col-sm-4" src="{{ asset('img/h1.png') }}">
                 </div>
                 {% block nav %}
-                <div class="menu col-10">
-                    <nav>
-                        <span class="left col-5">
-                            <a href="{{ path('story') }}">Histoire</a>
-                            <a href="rules">Règles du jeu</a>
-                        </span>
-                        <span class="play col-2">
-                            <a href="{{ path('game_index') }}">Jouer</a>
-                        </span>
-                        <span class="right col-5">
-                            <a href="{{ path('ladder') }}">Classement</a>
-                            <a href="{{ path('tournament_index') }}">Tournois</a>
-                        </span>
-                    </nav>
-                </div>
+                    <div class="menu col-10">
+                        <nav>
+                            <span class="left col-11 col-sm-5">
+                                <a href="{{ path('story') }}">Histoire</a>
+                                <a href="{{ path('rules') }}">Règles du jeu</a>
+                            </span>
+                            <span class="play col-11 col-sm-2">
+                                <a href="{{ path('game_index') }}">Jouer</a>
+                            </span>
+                            <span class="right col-11 col-sm-5">
+                                <a href="{{ path('ladder') }}">Classement</a>
+                                <a href="{{ path('tournament_index') }}">Tournois</a>
+                            </span>
+                        </nav>
+                    </div>
                 {% endblock %}
                 <div class="decoration">
-                        <img class="bande col-11 col-sm-9" src="{{ asset('img/h2.png') }}">
+                    <img class="bande col-11 col-sm-9" src="{{ asset('img/h2.png') }}">
                 </div>
-        </header>
-        {% block body %}
-        
-        {% endblock %}
+                </header>
+                {% block body %}
 
-        <footer {% block classFooter %}{% endblock %}>
-            <div class="decoration">
-                    <img class="bande col-11" src="{{ asset('img/b1.png') }}">
+                {% endblock %}
             </div>
-            <div class="socials col-12 col-sm-8 col-md-6 col-lg-4">
-                <a href="https://www.facebook.com/madjacgames/" target="_blank" class><img src="{{ asset('img/facebook.svg') }}"></a>
-                <a href="https://www.twitter.com/madjacgames/" target="_blank" class><img src="{{ asset('img/twitter.svg') }}"></a>
-                <a href="https://www.instagram.com/madjacgames/" target="_blank" class><img src="{{ asset('img/instagram.svg') }}"></a>
-            </div>
-            <div class="decoration">
-                    <img class="bande col-11 col-sm-11" src="{{ asset('img/b2.png') }}">
-            </div>
-            <nav class="link col-10 col-sm-8 col-md-6 col-lg-4">
-                <a href="http://149.91.83.90/promo/"><p>Notre site vitrine</p></a>
-                <p>©MadJac</p>
-                <p>Signaler un problème</p>
-            </nav>
-        </footer>
-
+            <footer {% block classFooter %}{% endblock %}>
+                <div class="decoration">
+                        <img class="bande col-11" src="{{ asset('img/b1.png') }}">
+                </div>
+                <div class="socials col-12 col-sm-8 col-md-6 col-lg-4">
+                    <a href="https://www.facebook.com/madjacgames/" target="_blank" class><img src="{{ asset('img/facebook.svg') }}"></a>
+                    <a href="https://www.twitter.com/madjacgames/" target="_blank" class><img src="{{ asset('img/twitter.svg') }}"></a>
+                    <a href="https://www.instagram.com/madjacgames/" target="_blank" class><img src="{{ asset('img/instagram.svg') }}"></a>
+                </div>
+                <div class="decoration">
+                        <img class="bande col-11 col-sm-11" src="{{ asset('img/b2.png') }}">
+                </div>
+                <nav class="link col-10 col-sm-8 col-md-6 col-lg-4">
+                    <a href="http://149.91.83.90/promo/" target="_blank"><p>Notre site vitrine</p></a>
+                    <p>©MadJac</p>
+                    <a href="#"><p>Signaler un problème</p></a>
+                </nav>
+            </footer>
+        </main>
         <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

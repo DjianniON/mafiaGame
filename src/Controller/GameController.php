@@ -119,8 +119,27 @@ class GameController extends AbstractController
 
             return $this->redirectToRoute('show_game', ['partie' => $game->getId()]);
         }
+        $users = $userRepository->findAll();
+        $user = $this->getUser();
+        $nbUsers = count($users);
+
+        for($i= 0; $i < $nbUsers; $i++)
+        {
+            if($users[$i]->getRoles()[0] === 'ROLE_BANNED')
+            {
+                $banned = $users[$i];
+                $index = array_search($banned, $users);
+                unset($users[$index]);
+            }
+            elseif($users[$i]->getUsername() === $user->getUsername())
+            {
+                $index = array_search($user, $users);
+                unset($users[$index]);
+            }
+
+        }
         return $this->render('game/creer-partie.html.twig', [
-            'joueurs' => $userRepository->findAll()
+            'joueurs' => $users
         ]);
     }
 

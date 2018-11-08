@@ -11,16 +11,20 @@
                 <thead class="bordered center">
                     <td class="col-2">#</td>
                     <td class="col-6">Pseudo</td>
-                    <td class="col-2 text-right">V</td>
+                    <td class="col-2 text-right">Victoires</td>
                     <td class="col-2 text-right">Score</td>
                 </thead>
                 <tbody>
+                {% set c = 1 %}
+                {%  for joueur in joueurs %}
                     <tr>
-                        <td class="col-2">#</td>
-                        <td class="col-6">Pseudo</td>
-                        <td class="col-2 text-right">V</td>
-                        <td class="col-2 text-right">Score</td>
+                        <td class="col-2">{{ c }}</td>
+                        <td class="col-6">{{ joueur.username }}</td>
+                        <td class="col-2 text-right">{{ joueur.nbVictoires }}</td>
+                        <td class="col-2 text-right">{{ joueur.elo }}</td>
                     </tr>
+                    {% set c = c + 1 %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
