@@ -8,18 +8,18 @@
     {% endif %}
             <div class="jetons">
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Argent %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% for jeton in partie.tasJeton.Drogue %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}" />
                     {% endfor %}
                 </div>
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Cigarette %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton"/>
+                    {% for jeton in partie.tasJeton.Arme %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}"/>
                     {% endfor %}
                 </div>
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Alcool %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton"/>
+                    {% for jeton in partie.tasJeton.Oeuvre %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}"/>
                     {% endfor %}
                 </div>
                 <div class="pile">
@@ -49,18 +49,18 @@
                     {% endfor %}
                 </div>
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Oeuvre %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% for jeton in partie.tasJeton.Alcool %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}"/>
                     {% endfor %}
                 </div>
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Arme %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% for jeton in partie.tasJeton.Cigarette %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}"/>
                     {% endfor %}
                 </div>
                 <div class="pile">
-                    {% for jeton in partie.tasJeton.Drogue %}
-                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% for jeton in partie.tasJeton.Argent %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" id="jeton-{{ jeton.id }}"/>
                     {% endfor %}
                 </div>
             </div>

@@ -590,7 +590,7 @@ class GameController extends AbstractController
             $joueur->setMain($mainJoueur);
             $partie->setTasJeton($alljetons);
             $entityManager->flush();
-            return $this->json(['jetons' => $jetonJson, 'cartemain' => $mainJson,'tab' => $tabVide, 'alljetons' => $alljetons], 200);
+            return $this->json(['jetons' => $jetonJson, 'cartemain' => $mainJson], 200);
         }
         else
         {
@@ -658,7 +658,7 @@ class GameController extends AbstractController
         for ($i = 0; $i < count($board); $i++) {
             $main[] = $board[$i];
             $carteId = $board[$i]->getId();
-            $boardJson[] = $carteId;
+            $boardJson[] = $board[$i]->getJson();
             $index = array_search($carteId, $terrainId);
             unset($terrain[$index]);
         }
@@ -668,7 +668,7 @@ class GameController extends AbstractController
             {
                 $terrain[] = $chameaux[$i];
                 $carteId = $chameaux[$i]->getId();
-                $chamJson[] = $carteId;
+                $chamJson[] = $chameaux[$i]->getJson();
                 $index = array_search($carteId, $cadId);
                 unset($cadillac[$index]);
             }
@@ -678,7 +678,7 @@ class GameController extends AbstractController
             for ($i = 0; $i < count($cartes); $i++) {
                 $terrain[] = $cartes[$i];
                 $carteId = $cartes[$i]->getId();
-                $mainJson[] = $carteId;
+                $mainJson[] = $cartes[$i]->getJson();
                 $index = array_search($carteId, $mainId);
                 unset($main[$index]);
             }
