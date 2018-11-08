@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4abf9609-1521-48df-817f-373ff5977da5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/GameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GameController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/MainController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/MainController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/ladder.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ladder.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -121,7 +116,7 @@
           <entry key="env" value="95" />
           <entry key="php" value="14769" />
           <entry key="twig" value="8556" />
-          <entry key="txt" value="452" />
+          <entry key="txt" value="469" />
           <entry key="yaml" value="342" />
         </counts>
       </usages-collector>
@@ -130,7 +125,7 @@
           <entry key=".env file" value="95" />
           <entry key="CSS" value="1065" />
           <entry key="PHP" value="14769" />
-          <entry key="PLAIN_TEXT" value="460" />
+          <entry key="PLAIN_TEXT" value="477" />
           <entry key="Twig" value="8556" />
           <entry key="YAML" value="342" />
         </counts>
@@ -180,7 +175,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Repository/UserRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
+            <state relative-caret-position="488">
               <caret line="34" column="6" lean-forward="true" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
             </state>
           </provider>
@@ -572,7 +567,7 @@
       <workItem from="1541345782065" duration="6675000" />
       <workItem from="1541405676772" duration="68154000" />
       <workItem from="1541628777757" duration="10885000" />
-      <workItem from="1541662733474" duration="5020000" />
+      <workItem from="1541662733474" duration="5533000" />
     </task>
     <task id="LOCAL-00001" summary="BUG SUBSCRIBE USER">
       <created>1538634235712</created>
@@ -707,11 +702,18 @@
       <option name="project" value="LOCAL" />
       <updated>1541639589927</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="8/11 progress">
+      <created>1541667912298</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1541667912298</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="332280000" />
+    <option name="totallyTimeSpent" value="332793000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -724,9 +726,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="34" width="1513" height="973" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19931272" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19931272" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -738,8 +739,8 @@
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4975945" weight="0.32897863" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4886598" weight="0.32541567" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4694158" visible="true" weight="0.20427553" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" sideWeight="0.4886598" visible="true" weight="0.32541567" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4694158" weight="0.20427553" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5305842" side_tool="true" weight="0.27315915" />
       <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4975945" weight="0.32897863" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -792,7 +793,8 @@
     <MESSAGE value="Fixes + game may be finished" />
     <MESSAGE value="Inte board" />
     <MESSAGE value="Huge progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="Huge progress" />
+    <MESSAGE value="8/11 progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="8/11 progress" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Controller/CarteController.php">
@@ -1094,7 +1096,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Repository/UserRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
+        <state relative-caret-position="488">
           <caret line="34" column="6" lean-forward="true" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
         </state>
       </provider>
