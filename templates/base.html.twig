@@ -49,15 +49,15 @@
                 <div class="menu col-10">
                     <nav>
                         <span class="left col-5">
-                            <a href="story">Histoire</a>
+                            <a href="{{ path('story') }}">Histoire</a>
                             <a href="rules">Règles du jeu</a>
                         </span>
                         <span class="play col-2">
                             <a href="{{ path('game_index') }}">Jouer</a>
                         </span>
                         <span class="right col-5">
-                            <a href="ladder">Classement</a>
-                            <a href="tournaments">Tournois</a>
+                            <a href="{{ path('ladder') }}">Classement</a>
+                            <a href="{{ path('tournament_index') }}">Tournois</a>
                         </span>
                     </nav>
                 </div>
