@@ -1,0 +1,163 @@
+/* line 1, ../sass/main.scss */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 5, ../sass/main.scss */
+html, body {
+  height: 100%;
+}
+
+.yellow
+{
+  background-color:black;
+  color:#fedb48;
+}
+/* line 27, ../sass/main.scss */
+#plateau{
+  width: 100%;
+  height: 100%;
+  background: url('../img/bg_plateau.png');
+  background-size: cover;
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+
+}
+
+.jetons
+{
+  grid-column: 1 / 2;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-left: 15%;
+}
+
+.jetons img
+{
+  height: 80px;
+}
+
+.jeton:not(:first-child) {
+  margin-left: -25%;
+}
+
+.pile
+{
+  margin-right: auto;
+  display:inline-block;
+}
+
+.hand2
+{
+  grid-column:2 / 5;
+  grid-row: 1 / 2;
+  margin:auto;
+  margin-bottom: 0;
+  display: flex;
+}
+
+.cadi2
+{
+  grid-column:2 / 5;
+  grid-row: 2 / 3;
+  margin:auto;
+  margin-top:0;
+  display: flex;
+}
+
+.hand
+{
+  display: inline-flex;
+}
+
+.hand img
+{
+  display: block;
+  height:150px;
+  margin:auto -20px;
+}
+
+.hand1
+{
+  grid-column:2 / 5;
+  grid-row: -1 / -2;
+  display: flex;
+  margin:auto;
+  margin-top:0;
+}
+
+.hand1 .hand img:hover
+{
+  z-index: 9999;
+  margin-top:-10px;
+}
+
+.cadi1 .hand img:hover
+{
+  z-index: 9999;
+  margin-top:-10px;
+}
+
+.cadi1
+{
+  grid-column:2 / 5;
+  grid-row: -2 / -3;
+  display: flex;
+  margin:auto;
+}
+
+.terrain
+{
+  grid-column:2 / 5;
+  grid-row: 3 / 4;
+  display: flex;
+  justify-content: space-evenly;
+}
+.terrain img
+{
+  height: 150px;
+}
+
+#bloc-action
+{
+  grid-column: 5 / 6;
+  grid-row: 4 / 6;
+  display: flex;
+  flex-direction: column;
+  margin: auto 10% 20% 10%;
+  padding-left: 30px;
+}
+
+#attentejoueur
+{
+  position:fixed;
+  top:0;
+  left:0;
+  height: 100%;
+  width: 100%;
+  color:#fedb48;
+  background-color: #333333;
+  opacity: 0.8 !important;
+  font-size: 60px;
+  display:none;
+}
+
+#attentejoueur div
+{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom:15%;
+  text-align: center;
+}
+
+#retourParties
+{
+  z-index:9999;
+}

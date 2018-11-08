@@ -1,117 +1,109 @@
-<div class="row">
-    <div class="col-sm-4">
-        <div class="row">
-            <div class="col-sm-12">{% for jeton in partie.tasJeton.Argent %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
-                {% endfor %}</div>
-            <div class="col-sm-12">{% for jeton in partie.tasJeton.Cigarette %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
-                {% endfor %}</div>
-            <div class="col-sm-12">
-                {% for jeton in partie.tasJeton.Alcool %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
-                {% endfor %}
-            </div>
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-4">
-                        {% for jeton in partie.tasJeton.Chap_3 %}
-                            {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
-                            {% endif %}
 
-                        {% endfor %}
-                        {{ partie.tasJeton.Chap_3|length }}
-                    </div>
-                    <div class="col-sm-4">
-                        {% for jeton in partie.tasJeton.Chap_4 %}
-                            {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
-                            {% endif %}
-
-                        {% endfor %}
-                        {{ partie.tasJeton.Chap_4|length }}
-                    </div>
-                    <div class="col-sm-4">
-                        {% for jeton in partie.tasJeton.Chap_5 %}
-                            {% if loop.first %}
-                                <img src="{{ asset('jetons/'~jeton.image) }}" height="50px"/>
-                            {% endif %}
-
-                        {% endfor %}
-                        {{ partie.tasJeton.Chap_5|length }}
-                    </div>
+    {% if app.user.username == partie.joueurs[0].users.username %}
+        {% set joueur1 = partie.joueurs[0] %}
+        {% set joueur2 = partie.joueurs[1] %}
+    {% else %}
+        {% set joueur1 = partie.joueurs[1] %}
+        {% set joueur2 = partie.joueurs[0] %}
+    {% endif %}
+            <div class="jetons">
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Argent %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% endfor %}
                 </div>
-            </div>
-            <div class="col-sm-12">
-                {% for jeton in partie.tasJeton.Oeuvre %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />{{ loop.index }}
-                {% endfor %}
-            </div>
-            <div class="col-sm-12">
-                {% for jeton in partie.tasJeton.Arme %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
-                {% endfor %}
-            </div>
-            <div class="col-sm-12">
-                {% for jeton in partie.tasJeton.Drogue %}
-                    <img src="{{ asset('jetons/'~jeton.image) }}" height="50px" />
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        {% if app.user.username == partie.joueurs[0].users.username %}
-            {% set joueur1 = partie.joueurs[0] %}
-            {% set joueur2 = partie.joueurs[1] %}
-        {% else %}
-            {% set joueur1 = partie.joueurs[1] %}
-            {% set joueur2 = partie.joueurs[0] %}
-            {% endif %}
-        <div class="row">
-            <div class="col-sm-12" style="height: 100px">
-                {% for card in joueur2.main %}
-                    <img src="{{ asset('cartes/img/dos.png') }}" height="100px" />
-                {% endfor %}
-            </div>
-            <div class="col-sm-12" style="height: 100px">
-                {% for card in joueur2.chameaux %} <!--todo: Cartes chameau -->
-                    <img src="{{ asset('cartes/'~card.image) }}" height="100px" />
-                {% endfor %}
-            </div>
-            <div class="col-sm-12" style="height: 100px">
-                <div id="terrain" class="row">
-                    <div class="col-sm-2">{% if partie.Deck|length > 0 %}<img src="{{ asset('cartes/img/dos.png') }}" height="100px" />{% else %}Vide{% endif %}<p>Pioche</p></div>
-                    {% for card in partie.terrain %}
-                        <div class="col-sm-2"><img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" class="carteterrain {% if card.type.id == 1 %}chameau{% endif %}"  data-carte="{{ card.id }}" data-type="{{ card.type.nom }}" height="100px" /></div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Cigarette %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton"/>
+                    {% endfor %}
+                </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Alcool %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton"/>
+                    {% endfor %}
+                </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Chap_3 %}
+                        {% if loop.first %}
+                            <img src="{{ asset('jetons/'~jeton.image) }}"/>
+                            {{ partie.tasJeton.Chap_3|length }}
+                        {% endif %}
+
+                    {% endfor %}
+                    {% for jeton in partie.tasJeton.Chap_4 %}
+                        {% if loop.first %}
+                            <img src="{{ asset('jetons/'~jeton.image) }}"/>
+                            {{ partie.tasJeton.Chap_4|length }}
+                        {% endif %}
+
                     {% endfor %}
 
                 </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Chap_5 %}
+                        {% if loop.first %}
+                            <img src="{{ asset('jetons/'~jeton.image) }}"/>
+                            {{ partie.tasJeton.Chap_5|length }}
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Oeuvre %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% endfor %}
+                </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Arme %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% endfor %}
+                </div>
+                <div class="pile">
+                    {% for jeton in partie.tasJeton.Drogue %}
+                        <img src="{{ asset('jetons/'~jeton.image) }}" class="jeton" />
+                    {% endfor %}
+                </div>
             </div>
-            <div id="cadillac" class="col-sm-12" style="height: 100px">
-                {% for card in joueur1.chameaux %}
-                    <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartechameau {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" data-type="{{ card.type.nom }}"/>
-                {% endfor %}
+        <div class="hand2">
+            <div class="hand">
+            {% for card in joueur2.main %}
+                <img src="{{ asset('cartes/img/dos.png') }}"  />
+            {% endfor %}
             </div>
-            <div id="main" class="col-sm-12" style="height: 100px">Mes cartes<br>
-                {% for card in joueur1.main %}
-                    <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" height="100px" class="cartemain {{ card.type.nom }}" height="100px" data-carte="{{ card.id }}" data-type="{{ card.type.nom }}" />
-                {% endfor %}
-            </div>
+        </div>
+    <div class="cadi2">
+        <div class="hand">
+        {% for card in joueur2.chameaux %}
+                <img src="{{ asset('cartes/'~card.image) }}"  />
+        {% endfor %}
         </div>
     </div>
-    <div class="row" id="bloc-action">
-        <div class="col-sm-4">
-            <button class="btn btn-block btn-info" id="action-prendre">Prendre</button>
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-block btn-danger" id="action-vendre">Vendre</button>
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-block btn-warning" id="action-trade">Troquer</button>
+    <div class="terrain">
+
+        {% if partie.Deck|length > 0 %}<div><img src="{{ asset('cartes/img/dos.png') }}" /></div>{% else %}Vide{% endif %}
+            <div id="terrain">
+            {% for card in partie.terrain %}
+            <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" class="carteterrain {% if card.type.id == 1 %}chameau{% endif %}"  data-carte="{{ card.id }}" data-type="{{ card.type.nom }}" />
+        {% endfor %}
+            </div>
+    </div>
+    <div class="cadi1">
+        <div  id="cadillac" class="hand">
+        {% for card in joueur1.chameaux %}
+            <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" class="cartechameau {{ card.type.nom }}" data-carte="{{ card.id }}" data-type="{{ card.type.nom }}"/>
+        {% endfor %}
         </div>
     </div>
-    <div class="row" id="bloc-suivant" style="display:none">
-        <button class="btn btn-block btn-success">Action terminée</button>
+    <div class="hand1">
+        <div id="main" class="hand">
+        {% for card in joueur1.main %}
+            <img id="carte-{{ card.id }}" src="{{ asset('cartes/'~card.image) }}" class="cartemain {{ card.type.nom }}" data-carte="{{ card.id }}" data-type="{{ card.type.nom }}" />
+        {% endfor %}
+        </div>
     </div>
-</div>
+    <div id="bloc-action">
+            <button class="btn btn-block btn-dark yellow" id="action-prendre">PRENDRE</button>
+            <button class="btn btn-block btn-dark yellow" id="action-vendre">VENDRE</button>
+            <button class="btn btn-block btn-dark yellow" id="action-trade">TROQUER</button>
+            <a id="retourParties" class="btn btn-block btn-warning" href="{{ path('game_index') }}">RETOUR PARTIES</a>
+    </div>

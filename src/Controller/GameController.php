@@ -117,7 +117,7 @@ class GameController extends AbstractController
             $em->persist($game);
             $em->flush();
 
-            $this->redirectToRoute('show_game', ['partie' => $game->getId()]);
+            return $this->redirectToRoute('show_game', ['partie' => $game->getId()]);
         }
         return $this->render('game/creer-partie.html.twig', [
             'joueurs' => $userRepository->findAll()

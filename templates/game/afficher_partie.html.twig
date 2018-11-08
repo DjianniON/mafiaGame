@@ -1,6 +1,6 @@
 {% extends 'baseGame.html.twig' %}
 
-
+{% block title %}{{  partie.joueurs[0].users.username }} VS {{ partie.joueurs[1].users.username  }} - Chicago 1930{% endblock %}
 {% block stylesheets %}
     <style>
         .selected {
@@ -10,10 +10,19 @@
             border: 2px solid green;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('css/plateau.css') }}" />
 {% endblock %}
 
 {% block body %}
-    <h1>Partie entre {{ partie.joueurs[0].users.username }} et {{ partie.joueurs[1].users.username  }}</h1>
+    {% if app.user.username == partie.joueurs[0].users.username %}
+        {% set joueur1 = partie.joueurs[0] %}
+        {% set joueur2 = partie.joueurs[1] %}
+    {% else %}
+        {% set joueur1 = partie.joueurs[1] %}
+        {% set joueur2 = partie.joueurs[0] %}
+    {% endif %}
+    <!--<h1>Partie entre {# partie.joueurs[0].users.username }} et {{ partie.joueurs[1].users.username  #}</h1>-->
 
     <div id="plateau">
         {{  render(controller(
@@ -21,15 +30,16 @@
             { 'partie': partie.id }
         )) }}
     </div>
-    {{ dump(partie) }}
-    <div id="attentejoueur" style="position:fixed; top:0; left:0; height: 100%; width: 100%; background-color: darkgray; opacity: 0.8;font-size: 60px; display:none">
-        Attente du joueur
+
+    <div class="animated fadeInUp" id="attentejoueur">
+        <div class="animated fadeIn delay-1s">
+                Attente du joueur {{ joueur2.users.username }}<br>
+            Manche {{ partie.status['nbManche'] }} - Tour {{ partie.status['nbTour'] }}
+
+        </div>
     </div>
 {% endblock %}
 
-{% block title %}
-
-{% endblock %}
 
 {% block javascripts %}
 <script>
@@ -68,7 +78,7 @@
                     $('#attentejoueur').hide();
                 }
             }
-            else{
+            else if(etat === ('/game-finished/'+{{ partie.id }})){
                 window.location.replace(etat);
             }
         });
@@ -188,8 +198,8 @@
                             if (data['carteterrain'].nom === "Cadillac") {
                                 chameau = "chameau";
                             }
-                            $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" /></div>');
-                            $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" height="100px" data-carte="'+data['cartemain'].id+'" />');
+                            $('#terrain').append('<img id="carte-' + data['carteterrain'].id + '" src="http://127.0.0.1:8000/cartes/' + data['carteterrain'].fichier + '" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'].id + '" />');
+                            $('#main').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartemain'].fichier + '" class="cartemain new" data-carte="'+data['cartemain'].id+'" />');
                         }
                         else//Prendre les cartes Cadillac
                         {
@@ -197,7 +207,7 @@
                             {
                                 console.log('http://127.0.0.1:8000/cartes/' + typeof data['cartechameau'][i]);
                                 $('#carte-' + data['cartechameau'][i].id).remove();
-                                $('#cadillac').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" class="cartechameau new" height="100px" data-carte="'+data['cartechameau'][i].id+'" />');
+                                $('#cadillac').append('<img src="http://127.0.0.1:8000/cartes/' + data['cartechameau'][i].fichier + '" class="cartechameau new" data-carte="'+data['cartechameau'][i].id+'" />');
 
                             }
                             for(i = 0 ; i < data['carteterrain'].length ; i++)
@@ -206,7 +216,7 @@
                                 if (data['carteterrain'][i].nom === "Cadillac") {
                                     chameau = "chameau";
                                 }
-                                $('#terrain').append('<div class="col-sm-2" id="carte-' + data['carteterrain'][i].id + '"><img src="http://127.0.0.1:8000/cartes/' + data['carteterrain'][i].fichier + '" height="100px" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'][i].id + '" /></div>');
+                                $('#terrain').append('<img id="carte-' + data['carteterrain'].id + '" src="http://127.0.0.1:8000/cartes/' + data['carteterrain'][i].fichier + '" class="carteterrain ' + chameau + ' new"  data-carte="' + data['carteterrain'][i].id + '" />');
 
                             }
                         }
@@ -241,6 +251,7 @@
             }
             else
             {
+                $(this).prop('disabled', true);
                 $.ajax({
                     url: "{{ path('action_vendre', {partie: partie.id}) }}",
                     data: {
@@ -292,6 +303,7 @@
             console.log('OK');
             console.log(flag);
             if(flag === true) {
+                $(this).prop('disabled', true);
                 $.ajax({
                     url: "{{ path('action_vendre', {partie: partie.id}) }}",
                     data: {
@@ -364,6 +376,7 @@
                 alert('Choisissez des types différents de cartes terrain par rapport à votre main !');
             }
             else {
+                $(this).prop('disabled', true);
                 $.ajax({
                     url: "{{ path('action_trade', {partie: partie.id}) }}",
                     data: {
