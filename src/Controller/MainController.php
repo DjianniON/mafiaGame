@@ -29,4 +29,21 @@ class MainController extends Controller
     {
         return $this->render('story.html.twig');
     }
+
+
+    /**
+     * @Route("/rules", name="rules")
+     */
+    public function rules()
+    {
+        return $this->render('rules.html.twig');
+    }
+
+    /**
+     * @Route("/ladder", name="ladder")
+     */
+    public function lader()
+    {
+        return $this->render('ladder.html.twig');
+    }
 }

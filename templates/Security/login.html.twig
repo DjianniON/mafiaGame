@@ -17,7 +17,7 @@
         </div>
     {% endif %}
 
-        <div class="login form-border col-sm-5 center">
+        <div class="login full-border col-11 col-sm-5 center">
             <form action="{{ path('security_login') }}" method="post">
                 <fieldset>
                     <legend><h1>Connexion</h1></legend>
@@ -28,7 +28,7 @@
                         <input type="password" id="password" name="_password" class="form-control" placeholder="mot de passe" />
                     </div>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                    <button type="submit" class="button col-5">Connexion</button>
+                    <button type="submit" class="button col-10 col-sm-5">Connexion</button>
                 </fieldset>
             </form>
             <div class="fpsswrd">
@@ -39,5 +39,5 @@
 {% endblock %}
 
 {% block classFooter %}
-class="fixed-bot col-12"
+class="col-12"
 {% endblock %}

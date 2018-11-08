@@ -13,7 +13,7 @@
 
 
 {% block body %}
-    <div class="register form-border col-10 col-sm-8 col-md-6 col-lg-4">
+    <div class="register full-border col-10 col-sm-8 col-md-6 col-lg-4">
 
     <h1>inscription</h1>
     
@@ -21,7 +21,7 @@
             {{ form_row(form.username, { 'attr' : { 'placeholder' : "Nom d'utilisateur" }} ) }}
             {{ form_row(form.email, { 'attr' : { 'placeholder' : "Adresse e-mail" }} ) }}
             {{ form_row(form.password.first, { 'attr' : { 'placeholder' : "Mot de passe" }} ) }}
-            {{ form_row(form.password.second, { 'attr' : { 'placeholder' : "Mot de passe" }} ) }}
+            {{ form_row(form.password.second, { 'attr' : { 'placeholder' : "Confirmation mdp" }} ) }}
 
         <button type="submit" class="button col-5">S'inscrire !</button>
         {{ form_end(form) }}
@@ -30,5 +30,5 @@
 {% endblock %}
 
 {% block classFooter %}
-class="fixed-bot col-12"
+class="col-12"
 {% endblock %}

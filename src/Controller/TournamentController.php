@@ -5,10 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/tournaments")
+ */
 class TournamentController extends AbstractController
 {
     /**
-     * @Route("/tournament", name="tournament")
+     * @Route("/", name="tournament_index")
      */
     public function index()
     {
@@ -16,4 +19,13 @@ class TournamentController extends AbstractController
             'controller_name' => 'TournamentController',
         ]);
     }
+
+    /**
+     * @Route("/classic", name="classic")
+     */
+    public function classic()
+    {
+        return $this->render('tournament/classic.html.twig');
+    }
+
 }
