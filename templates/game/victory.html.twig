@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{{ player.users.username }} won !
+    <div class="text-center">
+        <h1>{{ player.users.username }} a gagné ! ({{ score1 }} - {{ score2 }})</h1>
+        <a href="{{ path('game_index') }}">Retour</a>
+    </div>
+
 {% endblock %}
 
 {% block title %}

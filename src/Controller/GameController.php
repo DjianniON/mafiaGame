@@ -174,20 +174,24 @@ class GameController extends AbstractController
         $p2 = $partie->getJoueurs()[1];
         if($p1->getScore() === 2 || $p2->getScore() === 2 || $partie->getStatus()['status'] === 'G')
         {
-            $partie->setStatus(['status' => 'G', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
-            if($p1->getScore() > $p2->getScore())
+            if($partie->getStatus()['status'] !== 'G')
             {
-                $user1 = $p1->getUsers();
-                $user1->setNbVictoires($user1->getNbVictoires()+1);
-                $this->GenerateElo($user1,$partie);
+                $partie->setStatus(['status' => 'G', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
+                if($p1->getScore() > $p2->getScore())
+                {
+                    $user1 = $p1->getUsers();
+                    $user1->setNbVictoires($user1->getNbVictoires()+1);
+                    $this->GenerateElo($user1,$partie);
+                }
+                else
+                {
+                    $user1 = $p2->getUsers();
+                    $user1->setNbVictoires($user1->getNbVictoires()+1);
+                    $this->GenerateElo($user1,$partie);
+                }
+                $entityManager->flush();
             }
-            else
-            {
-                $user1 = $p1->getUsers();
-                $user1->setNbVictoires($user1->getNbVictoires()+1);
-                $this->GenerateElo($user1,$partie);
-            }
-            $entityManager->flush();
+
             return $this->json($this->generateUrl('partie_finie',['partie' => $partie->getId()]));
         }
         if($partie->getStatus()['status'] !== 'F') {
@@ -742,12 +746,16 @@ class GameController extends AbstractController
             if($p1->getScore() > $p2->getScore())
             {
                 $player = $p1;
+                $score1 = $p1->getScore();
+                $score2 = $p2->getScore();
             }
             else
             {
                 $player = $p2;
+                $score1 = $p2->getScore();
+                $score2 = $p1->getScore();
             }
-            return $this->render('game/victory.html.twig',['player' => $player]);
+            return $this->render('game/victory.html.twig',['player' => $player, 'score1' => $score1, 'score2' => $score2]);
         }
         else
         {
