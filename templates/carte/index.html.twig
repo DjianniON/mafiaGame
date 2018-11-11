@@ -19,8 +19,8 @@
                 <td>{{ carte.id }}</td>
                 <td>{{ carte.image }}</td>
                 <td>
-                    <a href="{{ path('carte_show', {'id': carte.id}) }}">show</a>
-                    <a href="{{ path('carte_edit', {'id': carte.id}) }}">edit</a>
+                    <a href="{{ path('carte_show', {'id': carte.id}) }}">Montrer la carte</a>
+                    <a href="{{ path('carte_edit', {'id': carte.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('carte_new') }}">Create new</a>
+    <a href="{{ path('carte_new') }}">Nouvelle carte</a>
 {% endblock %}

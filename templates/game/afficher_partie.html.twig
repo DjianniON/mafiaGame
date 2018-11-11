@@ -10,7 +10,6 @@
             border: 2px solid green;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('css/plateau.css') }}" />
 {% endblock %}
 
@@ -331,7 +330,6 @@
     });
 
     $(document).on('click', '#action-trade', function () {
-
         if (cartesSelectedTerrain.length <= 1) {
             alert('Selectionnez au minimum 2 cartes');
         }
@@ -346,21 +344,32 @@
         else {
             var flag = false;
             var type = "";
+            boucle:
             for (i = 0; i < cartesTerrainType.length; i++) {
                 type = cartesTerrainType[i];
+                if(cartesTerrainType[i] === 'Cadillac'){
+                    flag = false;
+                    alert('Vous ne pouvez pas troquer des contre des cartes Cadillac sur le terrain !');
+                    console.log(flag);
+                    break boucle;
+                }
                 for (j = 0; j < cartesType.length; j++) {
                     if(cartesType[j] !== type) {
                         flag = true;
                     }
                     else {
                         flag = false;
-                        break;
+                        alert('Choisissez des types différents de cartes terrain par rapport à votre main !');
+                        console.log(flag);
+                        break boucle;
+
                     }
                 }
             }
+
             if(flag === false)
             {
-                alert('Choisissez des types différents de cartes terrain par rapport à votre main !');
+
             }
             else {
                 $(this).prop('disabled', true);

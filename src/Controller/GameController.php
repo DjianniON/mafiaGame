@@ -172,7 +172,7 @@ class GameController extends AbstractController
     public function actualisePlateau(Partie $partie, JetonRepository $jetonRepository, CarteRepository $carteRepository, EntityManagerInterface $entityManager) {
         $p1 = $partie->getJoueurs()[0];
         $p2 = $partie->getJoueurs()[1];
-        if($p1->getScore() === 2 || $p2->getScore() === 2 || $partie->getStatus()['status'] === 'G' || $partie->getTerrain() === 0)
+        if($p1->getScore() === 2 || $p2->getScore() === 2 || $partie->getStatus()['status'] === 'G')
         {
             $partie->setStatus(['status' => 'G', 'nbManche' => $partie->getStatus()['nbManche'], 'nbTour' => $partie->getStatus()['nbTour']]);
             if($p1->getScore() > $p2->getScore())
@@ -541,7 +541,7 @@ class GameController extends AbstractController
                 $jetonTab[] = $jeton;
             }
 
-            elseif ($nbCartes === 5 && count($alljetons['Chap_5']) !== 0) {
+            elseif ($nbCartes >= 5 && count($alljetons['Chap_5']) !== 0) {
                 $jeton = array_pop($alljetons['Chap_5']);
                 $jetonsJoueur[] = $jeton;
                 $jetonTab[] = $jeton;
